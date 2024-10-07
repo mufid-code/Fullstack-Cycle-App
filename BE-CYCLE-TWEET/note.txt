@@ -1,0 +1,23 @@
+--Install Dependencies:
+npm init -y
+npm install express prisma @prisma/client typescript ts-node-dev joi bcrypt jsonwebtoken dotenv
+npm install --save-dev @types/express @types/node @types/jsonwebtoken
+-- Inisialisasi TypeScript:(tsconfig.json)
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "esModuleInterop": true,
+  }
+}
+--Inisialisasi Prisma:
+npx prisma init
+npx prisma generate
+--Struktur Direktori:
+/src
+  /controllers
+  /docs
+  /dto
+  /middlewares
+  /routes
+  /services
+  - index.ts

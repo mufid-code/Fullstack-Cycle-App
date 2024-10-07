@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  // directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  name            String
+  username        String?
+  email           String   @unique
+  password        String
+  bio             String?
+  avatarUrl       String?
+  role            Role     @default(USER)
+  isEmailVerified Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  Thread    Thread[]
+  likes     Like[]
+  followers Follower[] @relation("UserFollowers")
+  following Follower[] @relation("UserFollowing")
+  Token     Token[]
+}
+
+// one to many self relations
+model Thread {
+  id        Int      @id @default(autoincrement())
+  content   String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+
+  User        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  likes       Like[]
+  replies     Thread[] @relation("ThreadReplies")
+  repliesBy   Thread?  @relation("ThreadReplies", fields: [repliesById], references: [id])
+  repliesById Int?
+}
+
+model Like {
+  id Int @id @default(autoincrement())
+
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  Thread    Thread   @relation(fields: [threadId], references: [id])
+  threadId  Int
+  createdAt DateTime @default(now())
+}
+
+// many to many self relations
+model Follower {
+  id          Int      @id @default(autoincrement())
+  follower    User     @relation("UserFollowers", fields: [followerId], references: [id])
+  followerId  Int
+  following   User     @relation("UserFollowing", fields: [followingId], references: [id])
+  followingId Int
+  createdAt   DateTime @default(now())
+}
+
+model Token {
+  id        Int       @id @default(autoincrement())
+  token     String
+  type      TokenType
+  expires   DateTime
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
+
+  @@unique([userId, type], name: "userId_type_unique")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum TokenType {
+  ACCESS_TOKEN
+  REFRESH_TOKEN
+  PASSWORD_RESET_TOKEN
+}
