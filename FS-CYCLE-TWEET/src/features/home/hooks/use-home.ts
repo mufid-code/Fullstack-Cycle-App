@@ -4,7 +4,6 @@ import { threadInputs, threadSchema } from '../schemas/thread-schemas';
 import { createThread } from '../../../api/api-thread'; // Pastikan path ini benar
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
-import { useCreateRepliesThread } from '../../../app/hooks/use-threads';
 
 function useHome() {
   const queryClient = useQueryClient();
@@ -15,6 +14,7 @@ function useHome() {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<threadInputs>({
     resolver: zodResolver(threadSchema),
   });
@@ -53,6 +53,7 @@ function useHome() {
     errors,
     isSubmitting: mutation.isPending, // Update loading state based on the mutation
     onSubmit,
+    watch,
   };
 }
 

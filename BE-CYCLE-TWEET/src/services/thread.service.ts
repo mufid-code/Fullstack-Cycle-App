@@ -24,11 +24,38 @@ class ThreadService {
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
   }
 
   // Mengambil thread berdasarkan ID
   async getThreadById(id: number): Promise<Thread | null> {
+    const thread = await prisma.thread.findUnique({
+      where: { id },
+      include: {
+        replies: true,
+        likes: true,
+        User: {
+          select: {
+            name: true,
+            avatarUrl: true,
+          },
+        },
+      },
+    });
+    if (!thread) {
+      throw {
+        status: 404,
+        message: 'Thread not found!',
+        code: CustomErrorCode.USER_NOT_EXISTS,
+      } as customError;
+    }
+    return thread;
+  }
+  // Mengambil thread berdasarkan ID
+  async getThreadByuserId(id: number): Promise<Thread | null> {
     const thread = await prisma.thread.findUnique({
       where: { id },
       include: {

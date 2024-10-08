@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useUsers } from '../../../app/hooks/use-user';
 import { useFollowers, useFollowing } from '../../../app/hooks/use-followers';
 import { FollowEntity } from '../../../app/types/follow-dto';
+import { useAppSelector } from '../../../app/hooks/use-store';
 
 // const followers = [
 //   {
@@ -31,13 +32,9 @@ import { FollowEntity } from '../../../app/types/follow-dto';
 //   },
 // ];
 export default function FollowsTabs() {
-  const { id } = useParams();
-  const userId = Number(id);
-  // Fetch followers data
-  const { data: users, isLoading } = useUsers();
-  const { data: followers } = useFollowers(userId);
-  const { data: following } = useFollowing(userId);
-  console.log(users);
+  const userId = useAppSelector((state) => state.auth.user.id);
+  const { data: followers, isLoading } = useFollowers(userId);
+  const { data: following, isLoading: loadingFollowing } = useFollowing(userId);
   return (
     <TabsLayout
       title1={'Followers'}
@@ -52,8 +49,11 @@ export default function FollowsTabs() {
                 key={users.id}
                 name={users.follower.name}
                 handle={users.follower.username}
-                avatar={users.follower.avatarUrl}
-                userId={users.id}
+                avatar={
+                  users.follower.avatarUrl ||
+                  'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
+                }
+                followingId={users.id}
               />
             ))
           )}
@@ -61,7 +61,7 @@ export default function FollowsTabs() {
       }
       tabContent2={
         <>
-          {isLoading ? (
+          {loadingFollowing ? (
             <Spinner /> // Loading stateItemPost
           ) : (
             following?.map((users: FollowEntity) => (
@@ -69,14 +69,16 @@ export default function FollowsTabs() {
                 key={users.id}
                 name={users.following.name}
                 handle={users.following.username}
-                avatar={users.following.avatarUrl}
-                userId={users.id}
+                avatar={
+                  users.following.avatarUrl ||
+                  'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
+                }
+                followingId={users.id}
               />
             ))
           )}
         </>
       }
-      userId={userId}
     />
   );
 }

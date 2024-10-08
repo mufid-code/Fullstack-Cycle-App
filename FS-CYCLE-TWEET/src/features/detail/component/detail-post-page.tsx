@@ -4,12 +4,10 @@ import ItemPost from '../../../component/ui/item-post';
 import RepliesItemForm from './replies-item-form';
 import { useThreadById, useThreads } from '../../../app/hooks/use-threads';
 import { Link, useParams } from 'react-router-dom';
-import { useUserById } from '../../../app/hooks/use-user';
 
 export default function PostPage() {
   const { id } = useParams();
   const threadid = Number(id);
-  const { data } = useUserById(threadid);
   const { data: threadbyid } = useThreadById(threadid);
 
   const { data: threads, isLoading, isError } = useThreads();
@@ -19,27 +17,29 @@ export default function PostPage() {
     return <Toast status="error">Error loading threads</Toast>;
 
   return (
-    <Box>
+    <Box textColor={'tweet.putih'}>
       <Flex
         mt={4}
         padding={4}
         gap={3}
         alignItems={'center'}
       >
-        <HiOutlineArrowLeft size={26} />
         <Link to={'/'}>
-          <Text
-            fontSize={'28px'}
-            fontWeight={700}
-            lineHeight={'28px'}
-          >
-            Status
-          </Text>
+          <Flex gap={3}>
+            <HiOutlineArrowLeft size={26} />
+            <Text
+              fontSize={'28px'}
+              fontWeight={700}
+              lineHeight={'28px'}
+            >
+              Status
+            </Text>
+          </Flex>
         </Link>
       </Flex>
       <ItemPost
         key={Number(id)}
-        username={data?.name || ''}
+        username={threadbyid?.User.name || ''}
         postTime={new Date().toLocaleTimeString()}
         postContent={threadbyid?.content || ''}
         postImage={threadbyid?.imageUrl}

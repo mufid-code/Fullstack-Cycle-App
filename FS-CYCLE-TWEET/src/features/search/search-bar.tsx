@@ -5,16 +5,16 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-} from "@chakra-ui/react";
-import { RiUserSearchLine } from "react-icons/ri";
-import { ChangeEvent, useState } from "react";
+} from '@chakra-ui/react';
+import { RiUserSearchLine } from 'react-icons/ri';
+import { ChangeEvent, useState } from 'react';
 
 interface SearchBarProps {
   onSearch: (value: string) => void;
 }
 
 export default function SearchBar({ onSearch }: SearchBarProps) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -24,16 +24,22 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
   return (
     <Flex
-      rounded={"full"}
-      position={"relative"}
-      padding={"4px 18px"}
-      alignItems={"center"}
+      rounded={'full'}
+      position={'relative'}
+      padding={'4px 18px'}
+      alignItems={'center'}
     >
       <InputGroup>
         <InputLeftElement pointerEvents="none">
-          <Icon as={RiUserSearchLine} w="24px" h="24px" color="tweet.gray" />
+          <Icon
+            as={RiUserSearchLine}
+            w="24px"
+            h="24px"
+            color="tweet.gray"
+          />
         </InputLeftElement>
         <Input
+          color="white"
           variant="outline"
           borderColor="tweet.green"
           placeholder="Search your friend"

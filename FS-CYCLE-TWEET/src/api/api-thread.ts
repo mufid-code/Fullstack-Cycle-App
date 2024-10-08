@@ -11,9 +11,12 @@ export const createThread = async (
   data: CreateThreadDTO
 ): Promise<ThreadEntity> => {
   const formData = new FormData();
+
   formData.append('content', data.content);
-  if (data.imageUrl instanceof File) {
-    formData.append('imageUrl', data.imageUrl);
+  console.log(data.imageUrl instanceof File, data.imageUrl);
+
+  if (data.imageUrl instanceof FileList) {
+    formData.append('imageUrl', data.imageUrl[0]);
   }
 
   const response = await apiV1.post('/threads', formData, {
@@ -67,14 +70,14 @@ export const createRepliesThread = async (
   id: number,
   data: repliesInputs
 ): Promise<ThreadEntity> => {
-  // const formData = new FormData();
-  // formData.append('content', data.content);
-  // if (data.imageUrl instanceof File) {
-  //   formData.append('imageUrl', data.imageUrl);
-  // }
+  const formData = new FormData();
+  formData.append('content', data.content);
+  if (data.imageUrl instanceof File) {
+    formData.append('imageUrl', data.imageUrl);
+  }
   const response = await apiV1.post(`/threads/${id}/replies`, data, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      // Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       'Content-Type': 'multipart/form-data',
     },
   });

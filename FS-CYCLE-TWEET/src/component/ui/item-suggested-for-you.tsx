@@ -1,14 +1,14 @@
 import { Alert, Card, Heading, Spinner } from '@chakra-ui/react';
 import ItemFollowing from './item-following';
-import { useThreads } from '../../app/hooks/use-threads';
-import { ThreadEntity } from '../../app/types/thread-dto';
+import { useUsers } from '../../app/hooks/use-user';
+import { UserEntity } from '../../app/types/auth-dto';
 
 // SuggestedForYou Component
 export function ItemSuggestedForYou() {
-  const { data: threads, isLoading, isError } = useThreads();
+  const { data: users, isLoading, isError } = useUsers();
   if (isLoading) return <Spinner />;
 
-  if (isError || !threads)
+  if (isError || !users)
     return <Alert status="error">Error loading threads</Alert>;
   return (
     <Card
@@ -24,13 +24,14 @@ export function ItemSuggestedForYou() {
       >
         Suggested for you
       </Heading>
-      {threads.map((threads: ThreadEntity) => (
+      {users.slice(0, 5).map((user: UserEntity) => (
         <ItemFollowing
-          key={threads.User.id}
-          name={threads.User.name}
-          handle={threads.User.bio}
+          key={user.id}
+          userId={user.id} // Kirimkan userId sebagai props
+          name={user.name}
+          handle={user.bio}
           avatar={
-            threads.User.avatarUrl ||
+            user.avatarUrl ||
             'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
           }
         /> // Kirim data user sebagai props

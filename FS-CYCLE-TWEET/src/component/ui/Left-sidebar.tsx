@@ -13,7 +13,9 @@ import { HiOutlineArrowLeftStartOnRectangle } from 'react-icons/hi2';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { RiUserSearchLine, RiHome7Line, RiHeart3Fill } from 'react-icons/ri';
 import { IconType } from 'react-icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { clearAuthData } from '../../app/store/store-auth-slice';
+import { useDispatch } from 'react-redux';
 
 // Definisi tipe data untuk setiap link item
 interface LinkItemProps {
@@ -86,7 +88,7 @@ const SidebarContent = ({ ...rest }) => {
         gap="2"
       >
         <Image
-          src="src/assets/logo.png"
+          src="https://res.cloudinary.com/dje40bx3b/image/upload/v1728317302/circle-image/pc6finzpiepopaudfwtf.png"
           h="48px"
           objectFit="contain"
         />
@@ -116,11 +118,19 @@ const SidebarContent = ({ ...rest }) => {
 
 // Komponen untuk Footer Sidebar
 const SidebarFooter = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // Fungsi untuk menangani logout
+  const handleLogout = () => {
+    dispatch(clearAuthData()); // Hapus data auth dari Redux dan localStorage
+    navigate('/login'); // Arahkan pengguna ke halaman login
+  };
   return (
     <Box ml="4">
       <Button
         color="tweet.putih"
         variant="link"
+        onClick={handleLogout}
         leftIcon={<HiOutlineArrowLeftStartOnRectangle />}
       >
         Log Out

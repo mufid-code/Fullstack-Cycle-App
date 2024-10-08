@@ -6,7 +6,8 @@ import { useThreads } from '../../../app/hooks/use-threads';
 
 export function HomeBase() {
   const { data: threads, isLoading, isError } = useThreads();
-  if (isLoading) return <Spinner />;
+
+  if (isLoading) return <Spinner margin="auto" />;
 
   if (isError || !threads)
     return <Toast status="error">Error loading threads</Toast>;
@@ -22,22 +23,25 @@ export function HomeBase() {
         buttonTitle={'post'}
       />
 
-      {threads?.map((thread: ThreadEntity) => (
-        <ItemPost
-          key={thread.id}
-          username={thread.User.name}
-          handle={thread.User.username}
-          avatarUrl={
-            thread.User.avatarUrl ||
-            'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
-          }
-          postTime={new Date(thread.createdAt).toLocaleTimeString()}
-          postContent={thread.content}
-          likesCount={thread.likes.length}
-          repliesCount={thread.replies.length}
-          postId={thread.id}
-        />
-      ))}
+      {threads?.map((thread: ThreadEntity) => {
+        return (
+          <ItemPost
+            key={thread.id}
+            username={thread.User.name}
+            handle={thread.User.username}
+            avatarUrl={
+              thread.User.avatarUrl ||
+              'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
+            }
+            postTime={new Date(thread.createdAt).toLocaleTimeString()}
+            postContent={thread.content}
+            postImage={thread.imageUrl}
+            likesCount={thread.likes.length}
+            repliesCount={thread.replies.length}
+            postId={thread.id}
+          />
+        );
+      })}
     </Box>
   );
 }

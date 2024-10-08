@@ -1,11 +1,9 @@
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
 
 interface TabsLayoutProps {
   title1: string;
   title2: string;
-  userId: number;
   tabContent1: ReactNode;
   tabContent2: ReactNode;
 }
@@ -13,7 +11,6 @@ interface TabsLayoutProps {
 export default function TabsLayout({
   title1,
   title2,
-  userId,
   tabContent1,
   tabContent2,
 }: TabsLayoutProps) {
@@ -76,14 +73,14 @@ export default function TabsLayout({
           flexDirection={'column'}
           gap={4}
         >
-          <Link to={`/follows/${userId}`}>{tabContent1}</Link>
+          {tabContent1}
         </TabPanel>
         <TabPanel
           display={'flex'}
           flexDirection={'column'}
           gap={4}
         >
-          <Link to={`/follows/${userId}`}>{tabContent2}</Link>
+          {tabContent2}
         </TabPanel>
       </TabPanels>
     </Tabs>

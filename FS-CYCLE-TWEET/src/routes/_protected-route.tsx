@@ -3,9 +3,10 @@ import { useAppSelector } from '../app/hooks/use-store';
 import { Box, Image, Spinner } from '@chakra-ui/react';
 
 export default function ProtectedRoute() {
-  const { user, loading } = useAppSelector((state) => state.auth);
+  const { user, loading, accessToken } = useAppSelector((state) => state.auth);
   console.log(user);
 
+  console.log(loading);
   if (loading == 'pending') {
     return (
       <Box
@@ -18,7 +19,7 @@ export default function ProtectedRoute() {
           <Image
             mb={4}
             h={50}
-            src="/logo.svg"
+            src="/src/assets/logo.png"
             alt="circle logo"
           />
           <Spinner
@@ -30,6 +31,9 @@ export default function ProtectedRoute() {
       </Box>
     );
   }
+  if (accessToken == null) {
+    return <Navigate to={'/login'} />;
+  }
 
   if (user.id) {
     return (
@@ -39,6 +43,6 @@ export default function ProtectedRoute() {
     );
   }
   if (loading == 'failed') {
-    return <Navigate to="login" />;
+    return <Navigate to="/login" />;
   }
 }

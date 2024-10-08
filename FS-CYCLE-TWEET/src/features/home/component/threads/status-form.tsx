@@ -2,13 +2,14 @@ import {
   FormControl,
   Button,
   Box,
-  Image,
   Flex,
   Input,
   Avatar,
   Text,
   Spinner,
+  FormLabel,
 } from '@chakra-ui/react';
+import { LuImagePlus } from 'react-icons/lu';
 import { useAppSelector } from '../../../../app/hooks/use-store';
 import useHome from '../../hooks/use-home';
 
@@ -19,8 +20,12 @@ export function StatusForm({
   placeholder: string;
   buttonTitle: string;
 }) {
-  const { register, handleSubmit, errors, isSubmitting, onSubmit } = useHome();
-  const { user } = useAppSelector((state) => state.auth);
+  const { register, handleSubmit, errors, isSubmitting, onSubmit, watch } =
+    useHome();
+  const user = useAppSelector((state) => state.auth.user);
+
+  console.log(watch());
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
@@ -33,8 +38,8 @@ export function StatusForm({
         p={4}
       >
         <Avatar
-          src={user?.avatarUrl}
-          name={user?.name}
+          src={user.avatarUrl}
+          name={user.name}
           borderColor={'brand.backgroundBox'}
           height={'40px'}
           width={'40px'}
@@ -61,16 +66,43 @@ export function StatusForm({
           alignItems={'center'}
           gap={4}
         >
-          <Image
+          {/* <Image
             src="/src/assets/icons/gallery-add-logo.png"
             alt="gallery"
             height={'24px'}
-          />
+          /> */}
           {/* <input
             type="file"
             name="uploadImage"
             id="uploadImage"
           /> */}
+          <FormControl>
+            <FormLabel
+              cursor={'pointer'}
+              display={'flex'}
+              color={'home.button.hoverText'}
+              fontSize={'25px'}
+            >
+              <LuImagePlus />
+            </FormLabel>
+            <Box flex={'1'}>
+              <Input
+                type="file"
+                {...register('imageUrl')}
+                hidden
+                name="imageUrl"
+              />
+
+              {errors.imageUrl && (
+                <Text
+                  fontSize={13}
+                  color={'red'}
+                >
+                  Error Upload Image
+                </Text>
+              )}
+            </Box>
+          </FormControl>
           <Button
             type="submit"
             backgroundColor={'tweet.green'}

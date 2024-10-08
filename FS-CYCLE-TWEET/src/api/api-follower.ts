@@ -1,4 +1,4 @@
-import { apiV1 } from "./api-config";
+import { apiV1 } from './api-config';
 
 // Follow a user
 export const followUser = async (followingId: number) => {
@@ -21,5 +21,10 @@ export const getFollowers = async (userId: number) => {
 // Get following list of a user
 export const getFollowing = async (userId: number) => {
   const response = await apiV1.get(`/following/${userId}`);
+  return response.data;
+};
+// Get isfollowing boolean value
+export const isFollowing = async (followingId: number) => {
+  const response = await apiV1.get(`/followers/is-following/${followingId}`);
   return response.data;
 };

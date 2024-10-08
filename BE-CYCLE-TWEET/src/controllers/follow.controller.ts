@@ -5,8 +5,11 @@ class FollowerController {
   async follow(req: Request, res: Response) {
     try {
       const followerId = (req as any).user.userId;
-      const {followingId} = req.body;
-      const follower = await followService.followUser(followerId, Number(followingId));
+      const { followingId } = req.body;
+      const follower = await followService.followUser(
+        followerId,
+        Number(followingId)
+      );
       if (followerId === followingId) {
         return res.status(400).json({ message: 'You cannot follow yourself' });
       }
@@ -22,7 +25,9 @@ class FollowerController {
       const followingId = Number(req.params.followingId);
       const follow = await followService.unfollowUser(followerId, followingId);
       if (follow.count === 0) {
-        return res.status(404).json({ message: 'You are not following this user' });
+        return res
+          .status(404)
+          .json({ message: 'You are not following this user' });
       }
       res.status(200).json({ message: 'Unfollowed successfully' });
     } catch (error) {
@@ -47,6 +52,21 @@ class FollowerController {
       return res.status(200).json(following);
     } catch (error) {
       res.status(500).json({ message: 'Error fetching following', error });
+    }
+  }
+  async isFollowing(req: Request, res: Response) {
+    try {
+      const followerId = (req as any).user.userId; // ID dari pengguna yang sedang login
+      const followingId = Number(req.params.followingId); // ID dari user yang dicek
+      const isFollowing = await followService.isUserFollowing(
+        followerId,
+        followingId
+      );
+      return res.status(200).json({ isFollowing });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: 'Error checking follow status', error });
     }
   }
 }

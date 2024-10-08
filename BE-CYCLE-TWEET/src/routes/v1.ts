@@ -15,6 +15,7 @@ import { updateUserAvatar } from '../controllers/upload.controller';
 
 import { ThreadSchema } from '../utils/thread.schema';
 import { upload } from '../middlewares/upload-file';
+import searchController from '../controllers/search.controller';
 
 export const routerv1 = express.Router();
 
@@ -119,7 +120,7 @@ routerv1.post('/auth/login', authController.Login);
  *         description: User not found
  */
 routerv1.get('/users/:id', userController.findById);
-routerv1.get('/users/search', userController.searchUsers);
+// routerv1.get('/users/search', userController.searchUsers);
 /**
  * @swagger
  * /users:
@@ -323,7 +324,7 @@ routerv1.post(
   '/threads',
   authentication,
   upload.single('imageUrl'),
-  validate(ThreadSchema),
+  // validate(ThreadSchema),
   threadController.create
 );
 /**
@@ -454,6 +455,30 @@ routerv1.post('/likes', authentication, likeController.addLike);
 routerv1.delete('/likes/:threadId', authentication, likeController.removeLike);
 /**
  * @swagger
+ * /threads/{threadId}/isLiked:
+ *   get:
+ *     summary: Check if user liked a thread
+ *     tags: [Like]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: threadId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The ID of the thread
+ *     responses:
+ *       200:
+ *         description: Like status retrieved
+ */
+routerv1.get(
+  '/threads/:threadId/isLiked',
+  authentication,
+  likeController.isThreadLiked
+);
+/**
+ * @swagger
  * /likes/thread/{threadId}:
  *   get:
  *     summary: Get all likes for a thread
@@ -571,6 +596,32 @@ routerv1.get('/followers/:userId', followController.getFollowers);
  *         description: List of following users
  */
 routerv1.get('/following/:userId', followController.getFollowing);
+/**
+ * @swagger
+ * /followers/is-following/{followingId}:
+ *   get:
+ *     summary: Check if the current user is following another user
+ *     tags: [Follower]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: followingId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The ID of the user to check
+ *     responses:
+ *       200:
+ *         description: Returns true if following, false otherwise
+ *       500:
+ *         description: Error
+ */
+routerv1.get(
+  '/followers/is-following/:followingId',
+  authentication,
+  followController.isFollowing
+);
 
 /**
  * @swagger
@@ -676,3 +727,51 @@ routerv1.post(
 );
 
 routerv1.get('/users/me', authentication, userController.logger);
+
+/** Search Routes **/
+// Mencari postingan berdasarkan kata kunci
+/**
+ * @swagger
+ * /search:
+ *   get:
+ *     summary: Mencari pengguna berdasarkan username atau nama
+ *     tags: [User]
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         description: String yang digunakan untuk mencari pengguna.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Daftar pengguna yang ditemukan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ *                   username:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   bio:
+ *                     type: string
+ *                   avatarUrl:
+ *                     type: string
+ *       400:
+ *         description: Parameter query harus berupa string
+ *       500:
+ *         description: Terjadi kesalahan saat mencari pengguna
+ */
+routerv1.get(
+  '/search',
+  authentication,
+  searchController.search.bind(searchController)
+);

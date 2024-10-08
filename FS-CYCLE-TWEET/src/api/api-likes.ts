@@ -1,4 +1,4 @@
-import { apiV1 } from "./api-config";
+import { apiV1 } from './api-config';
 
 // like a thread
 export const addLikeThread = async (threadId: number) => {
@@ -16,4 +16,8 @@ export const unlikeThread = async (threadId: number) => {
 export const getlikesThread = async (threadId: number) => {
   const response = await apiV1.get(`/likes/thread/${threadId}`);
   return response.data;
+};
+export const isThreadLiked = async (threadId: number) => {
+  const response = await apiV1.get(`/threads/${threadId}/isLiked`);
+  return response.data.isLiked;
 };

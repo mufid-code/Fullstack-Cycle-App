@@ -7,25 +7,23 @@ import {
   Image,
   Text,
   useDisclosure,
+  Avatar,
+  Spinner,
+  Toast,
 } from '@chakra-ui/react';
 import EditProfileModal from './item-edit-profile-modal';
-import { useUserById } from '../../app/hooks/use-user';
 
-// const profileData = {
-//   username: "✨ Stella Audhina ✨",
-//   handle: "audhinafh",
-//   coverPic: "src/assets/icons/cover-profile.png",
-//   profilePic: " https://bit.ly/dan-abramov",
-//   bio: "picked over by the worms, and weird fishes",
-//   following: 291,
-//   followers: 23,
-// };
+import { useAppSelector } from '../../app/hooks/use-store';
+import { useUserById } from '../../app/hooks/use-user';
 
 // RightBarMyProfile Component
 export function RightBarMyProfile() {
   // const { username, handle, coverPic, profilePic, bio, following, followers } =
   //   profileData;
-  const { data } = useUserById(Number(2));
+  const userId = useAppSelector((state) => state.auth.user.id);
+  const { data, isLoading, isError } = useUserById(userId);
+  const user = useAppSelector((state) => state.auth.user);
+
   const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI's modal hooks
 
   return (
@@ -45,14 +43,18 @@ export function RightBarMyProfile() {
         </Heading>
         <Stack gap="12px">
           <Image
-            src={data?.avatarUrl}
+            src={
+              user.avatarUrl ||
+              'https://res.cloudinary.com/dje40bx3b/image/upload/v1728323518/circle-image/vdlx9stb6q2vb1syhpb9.png'
+            }
             position="relative"
             borderRadius="12px"
             h="100px"
             backgroundSize="cover"
           />
-          <Image
-            src={data?.avatarUrl}
+          <Avatar
+            src={user.avatarUrl}
+            name={user.name}
             position="absolute"
             mt="70px"
             ml="24px"
@@ -85,43 +87,43 @@ export function RightBarMyProfile() {
               as={'span'}
               fontSize="24px"
             >
-              {data?.name}
+              {user.name}
             </Text>
             <Text
               as={'span'}
               fontSize="14px"
               textColor="tweet.gray"
             >
-              @{data?.username}
+              @{user.username}
             </Text>
             <Text
               as={'span'}
               fontSize="16px"
             >
-              {data?.bio}
+              {user.bio}
             </Text>
             <Flex
               gap="4px"
               fontSize="16px"
             >
-              <Text as={'span'}>{}</Text>
-              <Text
-                as={'span'}
-                textColor="tweet.gray"
-              >
-                Following
-              </Text>
-              <Text
-                ml="12px"
-                as={'span'}
-              >
-                {}
-              </Text>
+              <Text as={'span'}>{data?.following.length}</Text>
               <Text
                 as={'span'}
                 textColor="tweet.gray"
               >
                 Followers
+              </Text>
+              <Text
+                ml="12px"
+                as={'span'}
+              >
+                {data?.followers.length}
+              </Text>
+              <Text
+                as={'span'}
+                textColor="tweet.gray"
+              >
+                Following
               </Text>
             </Flex>
           </Stack>

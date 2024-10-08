@@ -14,8 +14,8 @@ import {
   VStack,
   Input,
   Textarea,
-} from "@chakra-ui/react";
-import { useState } from "react";
+} from '@chakra-ui/react';
+import { useState } from 'react';
 interface EditProfileProps {
   isOpen: boolean;
   onClose: () => void;
@@ -24,12 +24,16 @@ export default function EditProfileModal({
   isOpen,
   onClose,
 }: EditProfileProps) {
-  const [name, setName] = useState("✨ Stella Audhina ✨");
-  const [username, setUsername] = useState("audhinafh");
-  const [bio, setBio] = useState("picked over by the worms, and weird fishes");
+  const [name, setName] = useState('✨ Stella Audhina ✨');
+  const [username, setUsername] = useState('audhinafh');
+  const [bio, setBio] = useState('picked over by the worms, and weird fishes');
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      isCentered
+    >
       <ModalOverlay />
       <ModalContent
         bg="#1D1D1D"
@@ -42,7 +46,10 @@ export default function EditProfileModal({
         <ModalHeader>Edit Profile</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Box position="relative" mb={14}>
+          <Box
+            position="relative"
+            mb={14}
+          >
             <Image
               borderRadius="xl"
               w="full"
@@ -51,7 +58,11 @@ export default function EditProfileModal({
               src="src/assets/icons/cover-profile.png"
               alt="Cover Image"
             />
-            <Flex position="absolute" top="32" left="5">
+            <Flex
+              position="absolute"
+              top="32"
+              left="5"
+            >
               <Image
                 borderRadius="full"
                 boxSize="24"
@@ -63,9 +74,17 @@ export default function EditProfileModal({
             </Flex>
           </Box>
 
-          <VStack spacing={4} align="stretch" gap="8px">
+          <VStack
+            spacing={4}
+            align="stretch"
+            gap="8px"
+          >
             <Box>
-              <Text color="zinc.400" fontSize="xs" mb={1}>
+              <Text
+                color="zinc.400"
+                fontSize="xs"
+                mb={1}
+              >
                 Name
               </Text>
               <Input
@@ -74,12 +93,16 @@ export default function EditProfileModal({
                 onChange={(e) => setName(e.target.value)}
                 color="white"
                 borderColor="tweet.gray"
-                _hover={{ borderColor: "neutral.500" }}
+                _hover={{ borderColor: 'neutral.500' }}
               />
             </Box>
 
             <Box>
-              <Text color="zinc.400" fontSize="xs" mb={1}>
+              <Text
+                color="zinc.400"
+                fontSize="xs"
+                mb={1}
+              >
                 Username
               </Text>
               <Input
@@ -88,12 +111,16 @@ export default function EditProfileModal({
                 onChange={(e) => setUsername(e.target.value)}
                 color="white"
                 borderColor="tweet.gray"
-                _hover={{ borderColor: "neutral.500" }}
+                _hover={{ borderColor: 'neutral.500' }}
               />
             </Box>
 
             <Box>
-              <Text color="zinc.400" fontSize="xs" mb={1}>
+              <Text
+                color="zinc.400"
+                fontSize="xs"
+                mb={1}
+              >
                 Bio
               </Text>
               <Textarea
@@ -102,7 +129,7 @@ export default function EditProfileModal({
                 onChange={(e) => setBio(e.target.value)}
                 color="white"
                 borderColor="tweet.gray"
-                _hover={{ borderColor: "neutral.500" }}
+                _hover={{ borderColor: 'neutral.500' }}
                 h="28"
               />
             </Box>

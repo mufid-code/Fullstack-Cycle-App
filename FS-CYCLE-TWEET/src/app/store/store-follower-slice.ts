@@ -1,4 +1,3 @@
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface FollowerState {
@@ -19,10 +18,16 @@ const followerSlice = createSlice({
   name: 'follower',
   initialState,
   reducers: {
-    setFollowers: (state, action: PayloadAction<{ userId: number; followers: any[] }>) => {
+    setFollowers: (
+      state,
+      action: PayloadAction<{ userId: number; followers: any[] }>
+    ) => {
       state.followers[action.payload.userId] = action.payload.followers;
     },
-    setFollowing: (state, action: PayloadAction<{ userId: number; following: any[] }>) => {
+    setFollowing: (
+      state,
+      action: PayloadAction<{ userId: number; following: any[] }>
+    ) => {
       state.following[action.payload.userId] = action.payload.following;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -34,5 +39,6 @@ const followerSlice = createSlice({
   },
 });
 
-export const { setFollowers, setFollowing, setLoading, setError } = followerSlice.actions;
+export const { setFollowers, setFollowing, setLoading, setError } =
+  followerSlice.actions;
 export default followerSlice.reducer;

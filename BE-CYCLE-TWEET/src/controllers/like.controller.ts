@@ -1,16 +1,19 @@
 import { Request, Response } from 'express';
 import likeService from '../services/like.service';
+import prisma from '../prisma/prisma';
 
 class LikeController {
   async addLike(req: Request, res: Response) {
     try {
       const userId = (req as any).user.userId;
       // const threadId = Number(req.params.threadId);
-      const {threadId} = req.body;
+      const { threadId } = req.body;
       const like = await likeService.addLike(userId, threadId);
       res.json(like);
     } catch (error) {
-      res.status(500).json({ message: 'Error adding like or thread not found', error });
+      res
+        .status(500)
+        .json({ message: 'Error adding like or thread not found', error });
     }
   }
 
@@ -25,7 +28,7 @@ class LikeController {
 
       res.status(200).json({ message: 'Like removed' });
     } catch (error) {
-      res.status(500).json({ message: 'Error removing like', error });;
+      res.status(500).json({ message: 'Error removing like', error });
     }
   }
 
@@ -36,6 +39,16 @@ class LikeController {
       res.json(likes);
     } catch (error) {
       res.status(500).json({ message: 'Error fetching likes', error });
+    }
+  }
+  async isThreadLiked(req: Request, res: Response) {
+    try {
+      const userId = (req as any).user.userId;
+      const threadId = Number(req.params.threadId);
+      const isLiked = await likeService.isThreadLikedByUser(userId, threadId);
+      res.status(200).json({ isLiked });
+    } catch (error) {
+      res.status(500).json({ message: 'Error checking like status', error });
     }
   }
 }

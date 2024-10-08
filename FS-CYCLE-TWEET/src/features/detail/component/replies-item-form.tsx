@@ -80,8 +80,8 @@ export default function RepliesItemForm({
           />
           <Button
             type="submit"
-            backgroundColor={'brand.green-dark'}
-            color={'brand.white-dark'}
+            backgroundColor={'tweet.green'}
+            color={'tweet.putih'}
             height={'33px'}
             justifyItems={'center'}
             rounded={'full'}

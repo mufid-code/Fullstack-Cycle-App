@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { UserStoreDTO } from '../../features/auth/types/dto';
 import { apiV1 } from '../../api/api-config';
-
+import Cookies from 'js-cookie';
 export const getUserLogged = createAsyncThunk('users/authLogged', async () => {
   const response = await apiV1.get<null, { data: UserStoreDTO }>('/auth/check');
   return response.data;
@@ -60,6 +60,9 @@ const authSlice = createSlice({
     clearAuthData() {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      // Hapus token dari Cookies
+      Cookies.remove('token');
+
       return initialState;
     },
   },

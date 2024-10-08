@@ -1,32 +1,30 @@
-import { UserEntity } from "./auth-dto";
+import { UserEntity } from './auth-dto';
 
 export type ThreadEntity = {
-    id        :number      
-    content   :string
-    imageUrl?  :string
-    createdAt :Date 
-    User      :UserEntity
-    replies : ThreadEntity[]
-    likes: LikeEntity[];
+  id: number;
+  content: string;
+  imageUrl?: string;
+  createdAt: Date;
+  User: UserEntity;
+  userId: number;
+  replies: ThreadEntity[];
+  likes: LikeEntity[];
 };
 
-
 export interface LikeEntity {
-    id: number;
-    userId: number;
-    threadId: number;
+  id: number;
+  userId: number;
+  threadId: number;
 }
-  
 
-export type ThreadRequestDTO = Pick<ThreadEntity, "content" | "imageUrl">;
+export type ThreadRequestDTO = Pick<ThreadEntity, 'content' | 'imageUrl'>;
 
 export type ThreadResponseDTO = {
   data: ThreadEntity;
   status: string;
   message: string;
 };
-export type ThreadPostResponseDTO = Omit<ThreadResponseDTO, "data">;
-
+export type ThreadPostResponseDTO = Omit<ThreadResponseDTO, 'data'>;
 
 // // one to many self relations
 // model Thread {

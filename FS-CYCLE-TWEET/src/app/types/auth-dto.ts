@@ -14,7 +14,7 @@ export interface UserEntity {
 
   likes: LikeEntity;
   Thread: ThreadEntity;
-  followers: FollowEntity;
+  followers: FollowEntity[];
   following: FollowEntity;
   createdAt: Date;
   updatedAt: Date;

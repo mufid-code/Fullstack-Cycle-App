@@ -1,5 +1,9 @@
-import { useMutation } from '@tanstack/react-query';
-import { addLikeThread, unlikeThread } from '../../api/api-likes';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  addLikeThread,
+  isThreadLiked,
+  unlikeThread,
+} from '../../api/api-likes';
 
 // Like a thread
 export const useLikeThread = () => {
@@ -12,5 +16,13 @@ export const useLikeThread = () => {
 export const useUnlikeThread = () => {
   return useMutation({
     mutationFn: (threadId: number) => unlikeThread(threadId),
+  });
+};
+
+// Get islike by ID
+export const useIsThreadLiked = (threadId: number) => {
+  return useQuery({
+    queryKey: ['thread', threadId],
+    queryFn: () => isThreadLiked(threadId),
   });
 };

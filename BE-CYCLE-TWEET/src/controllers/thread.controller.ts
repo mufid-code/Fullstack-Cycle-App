@@ -10,7 +10,7 @@ class ThreadController {
       const authorId = (req as any).user.userId;
       const fileUpload = req.file;
       let imageUrl = null;
-
+      console.log(fileUpload);
       if (fileUpload) {
         const image = await cloudinaryService.uploadSingle(
           req.file as Express.Multer.File
@@ -25,7 +25,6 @@ class ThreadController {
       const data = await ThreadSchema.validateAsync(value);
       const threads = await threadService.createThread(data);
       res.status(201).json(threads);
-      res.json(threads);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -88,7 +87,7 @@ class ThreadController {
 
       res.status(201).json(reply);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       res.status(500).json({ message: 'Failed to reply to thread', error });
     }
   }

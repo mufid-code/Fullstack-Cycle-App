@@ -1,10 +1,10 @@
-import { UserEntity } from "./auth-dto";
+import { UserEntity } from './auth-dto';
 
 export interface FollowEntity {
-    id: number;
-    following: UserEntity;
-    followingId: number;
-    follower: UserEntity;
-    followerId: number
-    createdAt    :   Date ;
+  id: number;
+  following: UserEntity;
+  followingId: number;
+  follower: UserEntity;
+  followerId: number;
+  createdAt: Date;
 }

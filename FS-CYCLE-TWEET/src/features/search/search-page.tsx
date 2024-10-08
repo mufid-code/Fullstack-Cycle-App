@@ -1,34 +1,48 @@
 // src/components/PageSearch.tsx
-import { Box, Text } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import SearchBar from "./search-bar";
-import ItemPost from "../../component/ui/item-post";
-import { searchUsers } from "../../api/api-user";
-import { UserEntity } from "../../app/types/auth-dto";
+import { Box, Spinner, Text } from '@chakra-ui/react';
+
+import { useState } from 'react';
+import SearchBar from './search-bar';
+
+import { UserEntity } from '../../app/types/auth-dto';
+import { useSearch } from '../../app/hooks/use-search';
+import ItemFollowing from '../../component/ui/item-following';
 
 export default function PageSearch() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [querry, setSearchTerm] = useState('');
 
-  const { data, isLoading, error } = useQuery<UserEntity[]>({
-    queryKey: ["searchUsers", searchTerm],
-    queryFn: () => searchUsers(searchTerm),
-    enabled: searchTerm.length > 0, // Hanya fetch data jika ada input
-  });
+  // const { data } = useQuery<UserEntity[]>({
+  //   queryKey: ['searchUsers', searchTerm],
+  //   queryFn: () => searchUsers(searchTerm),
+  //   enabled: searchTerm.length > 0, // Hanya fetch data jika ada input
+  // });
+  const { data, isLoading, isError } = useSearch(querry);
 
   return (
-    <Box textAlign={"center"} padding={4}>
+    <Box
+      textAlign={'center'}
+      padding={4}
+    >
       <SearchBar onSearch={(value) => setSearchTerm(value)} />
-      {!searchTerm && (
-        <Box m={"auto"} textAlign={"center"} w={"348px"} padding={4}>
-          <Text fontSize={"20px"} fontWeight={700} lineHeight={"28px"}>
+      {!querry && (
+        <Box
+          m={'auto'}
+          textAlign={'center'}
+          w={'348px'}
+          padding={4}
+        >
+          <Text
+            fontSize={'20px'}
+            fontWeight={700}
+            lineHeight={'28px'}
+          >
             Write and search something
           </Text>
           <Text
-            fontSize={"14px"}
+            fontSize={'14px'}
             fontWeight={400}
-            lineHeight={"20px"}
-            color={"brand.fontSecondary"}
+            lineHeight={'20px'}
+            color={'tweet.gray'}
           >
             Try searching for something else or check the spelling of what you
             typed.
@@ -36,15 +50,12 @@ export default function PageSearch() {
         </Box>
       )}
 
-      {searchTerm && isLoading && <Text>Loading...</Text>}
-      {searchTerm && error && <Text>Error while searching users</Text>}
-
       {data?.length === 0 && (
         <Text
-          fontSize={"14px"}
+          fontSize={'14px'}
           fontWeight={400}
-          lineHeight={"20px"}
-          color={"tweet.gray"}
+          lineHeight={'20px'}
+          color={'tweet.gray'}
         >
           No users found
         </Text>
@@ -52,18 +63,24 @@ export default function PageSearch() {
 
       {data && data.length > 0 && (
         <Box mt={4}>
-          {data.map((user) => (
-            <ItemPost
-              key={user.id}
-              username={user.name}
-              handle={user.username}
-              avatarUrl={user.avatarUrl || "default-avatar-url.png"}
-              postTime={""} // Tidak ada waktu posting pada hasil pencarian user
-              postContent={`User Bio: ${user.bio || "No bio available"}`}
-              likesCount={0} // Tidak ada like pada hasil pencarian user
-              repliesCount={0} // Tidak ada reply pada hasil pencarian user
-            />
-          ))}
+          <>
+            {isLoading ? (
+              <Spinner /> // Loading state
+            ) : (
+              data?.map((users: UserEntity) => (
+                <ItemFollowing
+                  key={users.id}
+                  name={users.name}
+                  handle={users.username}
+                  avatar={
+                    users.avatarUrl ||
+                    'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
+                  }
+                  followingId={users.id}
+                />
+              ))
+            )}
+          </>
         </Box>
       )}
     </Box>

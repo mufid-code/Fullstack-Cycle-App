@@ -34,7 +34,7 @@ export async function authentication(
       token,
       TokenType.ACCESS_TOKEN
     );
-    console.log('auth', tokenInDb);
+    // console.log('auth', tokenInDb);
 
     if (!tokenInDb) {
       throw {

@@ -71,31 +71,31 @@ class UserController {
     }
   }
   // Search users by username or name
-  async searchUsers(req: Request, res: Response) {
-    const { query } = req.query;
+  // async searchUsers(req: Request, res: Response) {
+  //   const { query } = req.query;
 
-    // Ensure query is a string
-    if (typeof query !== 'string') {
-      return res
-        .status(400)
-        .json({ error: 'Query parameter must be a string' });
-    }
+  //   // Ensure query is a string
+  //   if (typeof query !== 'string') {
+  //     return res
+  //       .status(400)
+  //       .json({ error: 'Query parameter must be a string' });
+  //   }
 
-    try {
-      const users = await prisma.user.findMany({
-        where: {
-          OR: [
-            { username: { contains: query, mode: 'insensitive' } },
-            { name: { contains: query, mode: 'insensitive' } },
-          ],
-        },
-      });
+  //   try {
+  //     const users = await prisma.user.findMany({
+  //       where: {
+  //         OR: [
+  //           { username: { contains: query, mode: 'insensitive' } },
+  //           { name: { contains: query, mode: 'insensitive' } },
+  //         ],
+  //       },
+  //     });
 
-      res.json(users);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to search users' });
-    }
-  }
+  //     res.json(users);
+  //   } catch (error) {
+  //     res.status(500).json({ error: 'Failed to search users' });
+  //   }
+  // }
 }
 
 export default new UserController();
