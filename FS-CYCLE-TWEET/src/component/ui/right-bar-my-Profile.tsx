@@ -8,8 +8,6 @@ import {
   Text,
   useDisclosure,
   Avatar,
-  Spinner,
-  Toast,
 } from '@chakra-ui/react';
 import EditProfileModal from './item-edit-profile-modal';
 
@@ -21,7 +19,7 @@ export function RightBarMyProfile() {
   // const { username, handle, coverPic, profilePic, bio, following, followers } =
   //   profileData;
   const userId = useAppSelector((state) => state.auth.user.id);
-  const { data, isLoading, isError } = useUserById(userId);
+  const { data } = useUserById(userId);
   const user = useAppSelector((state) => state.auth.user);
 
   const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI's modal hooks

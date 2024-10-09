@@ -14,11 +14,7 @@ export default function PostPage() {
     isLoading: loadingById,
     isError: errorById,
   } = useThreadById(Number(id));
-  const {
-    data: replies,
-    isLoading: loadingReplies,
-    isError: errorReplies,
-  } = useRepliesById(Number(id));
+  const { data: replies } = useRepliesById(Number(id));
   console.log(threadbyid); // untuk mengecek data thread
   console.log(replies); // untuk mengecek data replies
 

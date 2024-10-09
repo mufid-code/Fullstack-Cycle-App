@@ -16,7 +16,7 @@ export default function PageSearch() {
   //   queryFn: () => searchUsers(searchTerm),
   //   enabled: searchTerm.length > 0, // Hanya fetch data jika ada input
   // });
-  const { data, isLoading, isError } = useSearch(querry);
+  const { data, isLoading } = useSearch(querry);
 
   return (
     <Box

@@ -1,8 +1,7 @@
 import { Spinner } from '@chakra-ui/react';
 import ItemFollowing from '../../../component/ui/item-following';
 import TabsLayout from '../../../component/ui/item-tab-layout';
-import { useParams } from 'react-router-dom';
-import { useUsers } from '../../../app/hooks/use-user';
+
 import { useFollowers, useFollowing } from '../../../app/hooks/use-followers';
 import { FollowEntity } from '../../../app/types/follow-dto';
 import { useAppSelector } from '../../../app/hooks/use-store';

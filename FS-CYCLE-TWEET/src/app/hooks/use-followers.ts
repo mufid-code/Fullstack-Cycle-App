@@ -7,7 +7,6 @@ import {
   isFollowing,
 } from '../../api/api-follower';
 import { useToast } from '@chakra-ui/react';
-import { apiV1 } from '../../api/api-config';
 
 // Hook untuk Follow User
 export const useFollowUser = () => {
