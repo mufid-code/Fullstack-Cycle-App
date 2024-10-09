@@ -1,7 +1,7 @@
 import express, { Express, Request, Response, Application } from 'express';
 import dotenv from 'dotenv';
-import { routerv1 } from './routes/v1';
-import { setupSwagger } from './docs/swaggerDoc';
+import { routerv1 } from './src/routes/v1';
+import { setupSwagger } from './src/docs/swaggerDoc';
 
 var cors = require('cors');
 // const bodyParser = require("body-parser");
