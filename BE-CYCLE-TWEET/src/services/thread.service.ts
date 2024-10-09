@@ -29,33 +29,34 @@ class ThreadService {
       },
     });
   }
-
-  // Mengambil thread berdasarkan ID
-  async getThreadById(id: number): Promise<Thread | null> {
-    const thread = await prisma.thread.findUnique({
-      where: { id },
+  async getRepliesByThreadId(threadId: number): Promise<Thread[]> {
+    const replies = await prisma.thread.findMany({
+      where: {
+        repliesById: threadId, // Kondisi untuk mendapatkan balasan dari thread dengan ID tertentu
+      },
       include: {
-        replies: true,
-        likes: true,
         User: {
           select: {
             name: true,
             avatarUrl: true,
           },
         },
+        replies: true, // Termasuk balasan juga jika ada (nested replies)
+        likes: true, // Termasuk informasi likes jika ada
+      },
+      orderBy: {
+        createdAt: 'asc', // Urutkan balasan berdasarkan waktu dibuat
       },
     });
-    if (!thread) {
-      throw {
-        status: 404,
-        message: 'Thread not found!',
-        code: CustomErrorCode.USER_NOT_EXISTS,
-      } as customError;
+
+    if (!replies.length) {
+      throw new Error('No replies found for this thread');
     }
-    return thread;
+
+    return replies;
   }
   // Mengambil thread berdasarkan ID
-  async getThreadByuserId(id: number): Promise<Thread | null> {
+  async getThreadById(id: number): Promise<Thread | null> {
     const thread = await prisma.thread.findUnique({
       where: { id },
       include: {
@@ -116,17 +117,17 @@ class ThreadService {
 
   // Membalas thread (reply)
   async replyToThread(
-    threadId: number,
-    content: string,
-    userId: number
-    // imageUrl?: string
+    data: createThreadDTO,
+    threadId: number
   ): Promise<Thread | null> {
+    const { content, imageUrl, userId } = data;
+
     return await prisma.thread.create({
       data: {
-        // imageUrl: imageUrl,
-        repliesById: threadId,
-        userId,
         content,
+        imageUrl,
+        repliesById: threadId, // Menyimpan ID thread yang dibalas
+        userId, // User yang membuat balasan
       },
     });
   }

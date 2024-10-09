@@ -73,22 +73,46 @@ class ThreadController {
 
   async reply(req: Request, res: Response) {
     try {
-      const { content } = req.body;
-      // const imageUrl = req.file?.path;
-      const threadId = Number(req.params.id);
-      const userId = (req as any).user.userId;
+      const { content } = req.body; // Mengambil konten balasan dari request body
+      const threadId = Number(req.params.id); // Mendapatkan threadId dari params URL
+      const userId = (req as any).user.userId; // Mendapatkan userId dari token yang sudah di-decode
+      const fileUpload = req.file; // Mengambil file gambar jika ada
 
-      const reply = await ThreadService.replyToThread(
-        threadId,
+      let imageUrl = null;
+
+      // Jika ada file yang di-upload, upload ke Cloudinary
+      if (fileUpload) {
+        const image = await cloudinaryService.uploadSingle(fileUpload);
+        imageUrl = image.secure_url; // Mendapatkan URL dari gambar yang di-upload
+      }
+
+      // Membuat objek data yang akan divalidasi dan disimpan
+      const value = {
         content,
-        userId
-        // imageUrl
-      );
+        imageUrl,
+        userId,
+      };
 
+      // Validasi data menggunakan ThreadSchema
+      const data = await ThreadSchema.validateAsync(value);
+
+      // Menyimpan balasan ke database
+      const reply = await ThreadService.replyToThread(data, threadId);
+
+      // Mengembalikan response sukses
       res.status(201).json(reply);
     } catch (error) {
-      // console.log(error);
+      console.error(error); // Log error ke console untuk debug
       res.status(500).json({ message: 'Failed to reply to thread', error });
+    }
+  }
+  async getReplies(req: Request, res: Response) {
+    try {
+      const threadId = Number(req.params.id);
+      const replies = await ThreadService.getRepliesByThreadId(threadId);
+      res.status(200).json(replies);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to get replies', error });
     }
   }
 }

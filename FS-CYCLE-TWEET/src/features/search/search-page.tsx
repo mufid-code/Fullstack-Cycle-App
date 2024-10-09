@@ -32,6 +32,7 @@ export default function PageSearch() {
           padding={4}
         >
           <Text
+            textColor={'tweet.putih'}
             fontSize={'20px'}
             fontWeight={700}
             lineHeight={'28px'}
@@ -76,7 +77,7 @@ export default function PageSearch() {
                     users.avatarUrl ||
                     'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
                   }
-                  followingId={users.id}
+                  userId={users.id}
                 />
               ))
             )}

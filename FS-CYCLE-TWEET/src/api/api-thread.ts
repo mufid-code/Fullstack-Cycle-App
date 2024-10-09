@@ -4,6 +4,7 @@ import {
   repliesInputs,
   threadInputs,
 } from '../features/home/schemas/thread-schemas';
+import Cookies from 'js-cookie';
 import { apiV1 } from './api-config';
 
 // Create a new thread
@@ -58,9 +59,20 @@ export const updateThread = async (
 
 // Get thread by ID
 export const getThreadById = async (id: number) => {
+  const cookies = Cookies.get('token');
   const response = await apiV1.get(`/threads/${id}`, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      Authorization: `Bearer ${cookies}`,
+    },
+  });
+  return response.data;
+};
+// Get thread by ID
+export const fetchReplies = async (id: number) => {
+  const cookies = Cookies.get('token');
+  const response = await apiV1.get(`/threads/${id}/replies`, {
+    headers: {
+      Authorization: `Bearer ${cookies}`,
     },
   });
   return response.data;

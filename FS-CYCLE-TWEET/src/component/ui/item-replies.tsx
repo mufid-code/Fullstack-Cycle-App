@@ -1,5 +1,4 @@
 import { Avatar, Flex, HStack, Image, Stack, Text } from '@chakra-ui/react';
-import { Children } from 'react';
 
 interface ItemPostProps {
   username: string;

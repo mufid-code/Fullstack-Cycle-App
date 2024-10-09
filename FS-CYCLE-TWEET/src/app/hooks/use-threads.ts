@@ -4,6 +4,7 @@ import {
   createRepliesThread,
   createThread,
   deleteThread,
+  fetchReplies,
   getAllThreads,
   getThreadById,
   updateThread,
@@ -13,6 +14,7 @@ import {
   threadInputs,
 } from '../../features/home/schemas/thread-schemas';
 import { useToast } from '@chakra-ui/react';
+import { getAllImage } from '../../api/api-uploadimage';
 
 // Toast function
 const showToast = (
@@ -34,13 +36,27 @@ export const useThreads = () => {
     queryFn: getAllThreads,
   });
 };
-
+// Fetch all replies
+export const useRepliesById = (id: number) => {
+  return useQuery<ThreadEntity[]>({
+    queryKey: ['replies', id],
+    queryFn: () => fetchReplies(id),
+    enabled: !!id,
+  });
+};
 // Fetch thread by ID
 export const useThreadById = (id: number) => {
   return useQuery<ThreadEntity>({
-    queryKey: ['thread', id],
+    queryKey: ['threads', id],
     queryFn: () => getThreadById(id),
     enabled: !!id, // Only fetch if id exists
+  });
+};
+// Fetch all media
+export const useMedia = () => {
+  return useQuery({
+    queryKey: ['media'],
+    queryFn: getAllImage,
   });
 };
 

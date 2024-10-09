@@ -17,8 +17,35 @@ export const updateUserAvatar = async (req: Request, res: Response) => {
       data: { avatarUrl },
     });
 
-    res.status(200).json({ message: 'Avatar updated successfully', user: updatedUser });
+    res
+      .status(200)
+      .json({ message: 'Avatar updated successfully', user: updatedUser });
   } catch (error) {
-    res.status(500).json({ message: "failed to upload image" , error });
+    res.status(500).json({ message: 'failed to upload image', error });
+  }
+};
+
+export const media = async (req: Request, res: Response) => {
+  try {
+    const images = await prisma.thread.findMany({
+      where: {
+        imageUrl: {
+          not: null, // Pastikan hanya thread dengan gambar yang diambil
+        },
+      },
+      select: {
+        id: true, // Mengambil ID thread (opsional, untuk referensi lebih lanjut)
+        imageUrl: true, // Mengambil hanya kolom imageUrl
+        userId: true, //
+      },
+    });
+    // Jika tidak ada gambar, kirimkan pesan informasi
+    if (images.length === 0) {
+      return res.status(404).json({ message: 'No images found' });
+    }
+
+    res.status(201).json(images);
+  } catch (error) {
+    res.status(500).json({ message: 'Error searching media', error });
   }
 };

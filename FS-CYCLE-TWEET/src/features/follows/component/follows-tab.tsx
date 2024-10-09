@@ -53,7 +53,7 @@ export default function FollowsTabs() {
                   users.follower.avatarUrl ||
                   'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
                 }
-                followingId={users.id}
+                userId={users.followerId}
               />
             ))
           )}
@@ -73,7 +73,7 @@ export default function FollowsTabs() {
                   users.following.avatarUrl ||
                   'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
                 }
-                followingId={users.id}
+                userId={users.followingId}
               />
             ))
           )}

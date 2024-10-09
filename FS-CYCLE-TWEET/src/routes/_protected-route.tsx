@@ -6,7 +6,6 @@ export default function ProtectedRoute() {
   const { user, loading, accessToken } = useAppSelector((state) => state.auth);
   console.log(user);
 
-  console.log(loading);
   if (loading == 'pending') {
     return (
       <Box

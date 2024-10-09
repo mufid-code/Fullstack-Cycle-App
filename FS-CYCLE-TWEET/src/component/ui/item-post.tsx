@@ -13,12 +13,12 @@ interface ItemPostProps {
   username: string;
   handle?: string;
   avatarUrl?: string;
-  postTime: string;
+  postTime?: string;
   postContent: string;
   postImage?: string;
   likesCount: number;
   repliesCount: number;
-  postId: Number;
+  postId?: Number;
 }
 export default function ItemPost({
   username,

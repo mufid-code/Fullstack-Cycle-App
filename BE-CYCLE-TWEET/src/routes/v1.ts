@@ -11,7 +11,7 @@ import {
   forgetPasswordSchema,
   resetPasswordSchema,
 } from '../utils/auth.schema';
-import { updateUserAvatar } from '../controllers/upload.controller';
+import { media, updateUserAvatar } from '../controllers/upload.controller';
 
 import { ThreadSchema } from '../utils/thread.schema';
 import { upload } from '../middlewares/upload-file';
@@ -378,12 +378,15 @@ routerv1.delete('/threads/:id', authentication, threadController.delete);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *          multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               content:
  *                 type: string
+ *               imageUrl:
+ *                 type: string
+ *                 format: binary
  *             required:
  *               - content
  *     responses:
@@ -394,7 +397,12 @@ routerv1.delete('/threads/:id', authentication, threadController.delete);
  *       401:
  *         description: Unauthorized
  */
-routerv1.post('/threads/:id/replies', authentication, threadController.reply);
+routerv1.post(
+  '/threads/:id/replies',
+  authentication,
+  upload.single('imageUrl'),
+  threadController.reply
+);
 // Like
 /**
  * @swagger
@@ -774,4 +782,82 @@ routerv1.get(
   '/search',
   authentication,
   searchController.search.bind(searchController)
+);
+
+/**
+ * @swagger
+ * /images:
+ *   get:
+ *     summary: Get all uploaded images
+ *     description: Retrieve all images that have been uploaded.
+ *     responses:
+ *       200:
+ *         description: A list of image URLs.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 images:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         description: The image ID.
+ *                       imageUrl:
+ *                         type: string
+ *                         description: The URL of the uploaded image.
+ *       404:
+ *         description: No images found.
+ *       500:
+ *         description: Internal server error.
+ */
+routerv1.get('/images', media);
+/**
+ * @swagger
+ * /threads/{id}/replies:
+ *   get:
+ *     summary: Mendapatkan balasan dari thread
+ *     description: Mendapatkan daftar balasan untuk sebuah thread berdasarkan ID
+ *     tags:
+ *       - Thread
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: ID dari thread
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Balasan dari thread berhasil diambil
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   content:
+ *                     type: string
+ *                     description: Konten balasan
+ *                   imageUrl:
+ *                     type: string
+ *                     description: URL gambar opsional
+ *                   userId:
+ *                     type: integer
+ *                     description: ID dari pengguna yang membuat balasan
+ *       404:
+ *         description: Thread tidak ditemukan
+ *       500:
+ *         description: Gagal mendapatkan balasan
+ */
+routerv1.get(
+  '/threads/:id/replies',
+  authentication,
+  threadController.getReplies
 );

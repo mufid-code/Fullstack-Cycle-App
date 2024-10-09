@@ -12,7 +12,6 @@ import {
 import { useAppSelector } from '../../../app/hooks/use-store';
 import { usePostReply } from '../hooks/use-post-replies';
 import { useParams } from 'react-router-dom';
-import { threadInputs } from '../../home/schemas/thread-schemas';
 
 export default function RepliesItemForm({
   placeholder,
@@ -25,13 +24,6 @@ export default function RepliesItemForm({
   const { id } = useParams<{ id: string }>(); // Assuming id comes from route params
   const { register, handleSubmit, errors, isSubmitting, onSubmit } =
     usePostReply(id);
-
-  // Handle form submission, passing in the required threadId and form data
-  // const handleFormSubmit = (data: threadInputs) => {
-  //   onSubmit(Number(id), data); // Assuming 'id' is threadId
-  // };
-
-  // console.log(handleFormSubmit);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
