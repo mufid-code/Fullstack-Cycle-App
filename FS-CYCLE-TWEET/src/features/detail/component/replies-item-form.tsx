@@ -5,85 +5,89 @@ import {
   Image,
   Input,
   FormControl,
-  Spinner,
-  Text,
+  FormErrorMessage,
   Avatar,
+  Spinner,
 } from '@chakra-ui/react';
 import { useAppSelector } from '../../../app/hooks/use-store';
 import { usePostReply } from '../hooks/use-post-replies';
 import { useParams } from 'react-router-dom';
 
+interface RepliesItemFormProps {
+  placeholder: string;
+  buttonTitle: string;
+}
+
 export default function RepliesItemForm({
   placeholder,
   buttonTitle,
-}: {
-  placeholder: string;
-  buttonTitle: string;
-}) {
+}: RepliesItemFormProps) {
   const user = useAppSelector((state) => state.auth.user);
-  const { id } = useParams<{ id: string }>(); // Assuming id comes from route params
+  const { id } = useParams<{ id: string }>(); // Thread ID dari URL params
   const { register, handleSubmit, errors, isSubmitting, onSubmit } =
     usePostReply(id);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
-        display={'flex'}
-        alignItems={'center'}
+        display="flex"
+        alignItems="center"
         gap={4}
-        justifyContent={'space-between'}
-        borderBottom={'solid 1px'}
-        borderColor={'brand.borderAbu'}
+        borderBottom="1px solid"
+        borderColor="brand.borderAbu"
         p={4}
+        isInvalid={!!errors.content}
       >
         <Avatar
           src={user?.avatarUrl}
           name={user?.name}
-          borderColor={'brand.backgroundBox'}
-          height={'40px'}
-          width={'40px'}
-          rounded={'full'}
-          objectFit="cover"
+          size="md"
         />
-        <Box flex={'1'}>
+        <Box flex={1}>
           <Input
             {...register('content')}
-            variant={'unstyled'}
-            border={'none'}
+            variant="unstyled"
             placeholder={placeholder}
+            border="none"
           />
+
           {errors.content && (
-            <Text
+            <FormErrorMessage
               fontSize={13}
               color={'red'}
             >
               * {errors.content.message}
-            </Text>
+            </FormErrorMessage>
           )}
         </Box>
         <Flex
-          alignItems={'center'}
+          alignItems="center"
           gap={4}
         >
-          <Image
-            src="/src/assets/icons/gallery-add-logo.png"
-            alt="gallery"
-            height={'24px'}
+          <Input
+            type="file"
+            accept="image/*"
+            {...register('imageUrl')}
+            display="none"
+            id="image-upload"
           />
+          <label htmlFor="image-upload">
+            <Image
+              src="/src/assets/icons/gallery-add-logo.png"
+              alt="gallery"
+              height="24px"
+              cursor="pointer"
+            />
+          </label>
           <Button
             type="submit"
-            backgroundColor={'tweet.green'}
-            color={'tweet.putih'}
-            height={'33px'}
-            justifyItems={'center'}
-            rounded={'full'}
-            alignItems={'center'}
-            padding={4}
-            fontSize={'14px'}
-            fontWeight={700}
-            lineHeight={'17px'}
+            bg="tweet.green"
+            color="tweet.putih"
+            height="33px"
+            rounded="full"
+            isLoading={isSubmitting}
           >
-            {isSubmitting ? <Spinner /> : `${buttonTitle}`}
+            {isSubmitting ? <Spinner size="sm" /> : buttonTitle}
           </Button>
         </Flex>
       </FormControl>

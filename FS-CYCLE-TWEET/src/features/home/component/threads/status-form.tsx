@@ -8,6 +8,7 @@ import {
   Text,
   Spinner,
   FormLabel,
+  Image,
 } from '@chakra-ui/react';
 import { LuImagePlus } from 'react-icons/lu';
 import { useAppSelector } from '../../../../app/hooks/use-store';
@@ -23,7 +24,6 @@ export function StatusForm({
   const { register, handleSubmit, errors, isSubmitting, onSubmit, watch } =
     useHome();
   const user = useAppSelector((state) => state.auth.user);
-
   console.log(watch());
 
   return (
@@ -40,7 +40,6 @@ export function StatusForm({
         <Avatar
           src={user.avatarUrl}
           name={user.name}
-          borderColor={'brand.backgroundBox'}
           height={'40px'}
           width={'40px'}
           rounded={'full'}
@@ -66,16 +65,6 @@ export function StatusForm({
           alignItems={'center'}
           gap={4}
         >
-          {/* <Image
-            src="/src/assets/icons/gallery-add-logo.png"
-            alt="gallery"
-            height={'24px'}
-          /> */}
-          {/* <input
-            type="file"
-            name="uploadImage"
-            id="uploadImage"
-          /> */}
           <FormControl>
             <FormLabel
               cursor={'pointer'}
@@ -121,6 +110,14 @@ export function StatusForm({
           </Button>
         </Flex>
       </FormControl>
+      {watch('imageUrl') && (
+        <Image
+          mt={4}
+          src={URL.createObjectURL(watch('imageUrl')[0])}
+          rounded={'5px'}
+          borderBottom={'solid 1px'}
+        />
+      )}
     </form>
   );
 }

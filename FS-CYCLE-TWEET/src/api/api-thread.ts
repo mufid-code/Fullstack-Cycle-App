@@ -78,8 +78,9 @@ export const fetchReplies = async (id: number) => {
   return response.data;
 };
 // Get Replies by ID
+// API Call untuk mengirim balasan
 export const createRepliesThread = async (
-  id: number,
+  threadId: number,
   data: repliesInputs
 ): Promise<ThreadEntity> => {
   const formData = new FormData();
@@ -87,11 +88,12 @@ export const createRepliesThread = async (
   if (data.imageUrl instanceof File) {
     formData.append('imageUrl', data.imageUrl);
   }
-  const response = await apiV1.post(`/threads/${id}/replies`, data, {
+
+  const response = await apiV1.post(`/threads/${threadId}/replies`, formData, {
     headers: {
-      // Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       'Content-Type': 'multipart/form-data',
     },
   });
+
   return response.data;
 };

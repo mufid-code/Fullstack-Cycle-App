@@ -8,6 +8,7 @@ import {
   Image,
   Button,
   FlexProps,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { HiOutlineArrowLeftStartOnRectangle } from 'react-icons/hi2';
 import { FaRegUserCircle } from 'react-icons/fa';
@@ -16,6 +17,7 @@ import { IconType } from 'react-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { clearAuthData } from '../../app/store/store-auth-slice';
 import { useDispatch } from 'react-redux';
+import { CreatePostModal } from './item-post-modal';
 
 // Definisi tipe data untuk setiap link item
 interface LinkItemProps {
@@ -74,6 +76,7 @@ const NavItem = ({ icon, children, routelink, ...rest }: NavItemProps) => {
 
 // Komponen untuk Sidebar
 const SidebarContent = ({ ...rest }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
       bg={useColorModeValue('black', 'white')}
@@ -108,10 +111,15 @@ const SidebarContent = ({ ...rest }) => {
             bg: 'tweet.post',
             color: 'white',
           }}
+          onClick={onOpen}
         >
           Create Post
         </Button>
       </Flex>
+      <CreatePostModal
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </Box>
   );
 };
