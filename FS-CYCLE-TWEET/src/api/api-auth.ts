@@ -5,15 +5,8 @@ import {
   RegisterResponseDTO,
 } from '../features/auth/types/dto';
 import { apiV1 } from './api-config';
-import { apiRequest } from './api-service';
 
-interface ForgetPasswordData {
-  email: string;
-}
-interface ResetPasswordData {
-  token: string;
-  password: string;
-}
+import { apiRequest } from './api-service';
 
 export const login = (data: LoginRequestDTO): Promise<LoginResponseDTO> => {
   return apiRequest<LoginResponseDTO>({
@@ -32,14 +25,64 @@ export const registerData = (
   });
 };
 
-export const resetPassword = async (data: ResetPasswordData) => {
-  const response = await apiV1.post('/auth/reset-password', data);
-  return response.data;
+// export const sendPasswordResetEmail = async (email: string) => {
+//   return apiRequest({
+//     method: 'POST',
+//     url: '/auth/forgot-password',
+//     data: email,
+//   });
+// };
+
+export const sendPasswordResetEmail = async (email: string) => {
+  const response = await fetch(
+    'http://localhost:8000/api/v1/auth/forget-password',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Failed to send email.');
+  }
+
+  return await response.json();
 };
 
-export const forgetPassword = async (data: ForgetPasswordData) => {
-  const response = await apiV1
-    .post('/auth/forget-password', data)
-    .then((res) => res.data);
-  return response.data;
+// export const sendPasswordResetEmail = async (email: string) => {
+//   const response = await fetch(
+//     'http://localhost:8000/api/v1/auth/forgot-password',
+//     {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ email }),
+//     }
+//   );
+
+//   if (!response.ok) {
+//     throw new Error('Failed to send email.');
+//   }
+//   const data = await response.json();
+//   return data;
+// };
+
+export const resetPassword = async (
+  data: { password: string },
+  token: string
+) => {
+  const response = await fetch(
+    `http://localhost:8000/api/v1/auth/reset-password/${token}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Failed to reset password.');
+  }
+
+  return await response.json();
 };

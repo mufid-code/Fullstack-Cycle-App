@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { resetPassword, forgetPassword } from '../../api/api-auth';
+
 import { useToast } from '@chakra-ui/react';
 import {
   createUser,
@@ -11,35 +11,35 @@ import {
 } from '../../api/api-user';
 import { UserEntity } from '../types/auth-dto';
 
-export const useResetPassword = () => {
-  const toast = useToast();
-  return useMutation({
-    mutationFn: resetPassword,
-    onSuccess: () => {
-      toast({
-        title: 'Password reset successfully.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-    },
-  });
-};
+// export const useResetPassword = () => {
+//   const toast = useToast();
+//   return useMutation({
+//     mutationFn: (data: ResetPasswordInputs) => resetPassword(data, token),
+//     onSuccess: () => {
+//       toast({
+//         title: 'Password reset successfully.',
+//         status: 'success',
+//         duration: 3000,
+//         isClosable: true,
+//       });
+//     },
+//   });
+// };
 
-export const useForgetPassword = () => {
-  const toast = useToast();
-  return useMutation({
-    mutationFn: forgetPassword,
-    onSuccess: () => {
-      toast({
-        title: 'Reset link sent to your email.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-    },
-  });
-};
+// export const useForgetPassword = () => {
+//   const toast = useToast();
+//   return useMutation({
+//     mutationFn: forgetPassword,
+//     onSuccess: () => {
+//       toast({
+//         title: 'Reset link sent to your email.',
+//         status: 'success',
+//         duration: 3000,
+//         isClosable: true,
+//       });
+//     },
+//   });
+// };
 
 // Get all users (Admin only)
 export const useUsers = () => {
