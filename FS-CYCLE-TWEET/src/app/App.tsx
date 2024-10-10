@@ -2,7 +2,7 @@ import { apiV1 } from '../api/api-config';
 import { UserStoreDTO } from '../features/auth/types/dto';
 import { AppRouter } from '../routes';
 import { useAppDispatch } from './hooks/use-store';
-import { setAuthData } from './store/store-auth-slice';
+import { getUserLogged, setAuthData } from './store/store-auth-slice';
 import { useEffect } from 'react';
 function App() {
   const dispatch = useAppDispatch();
@@ -35,6 +35,7 @@ function App() {
   }
 
   useEffect(() => {
+    getUserLogged();
     checkAuth();
   }, []);
   return <AppRouter />;

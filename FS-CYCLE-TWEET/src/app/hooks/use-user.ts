@@ -55,6 +55,7 @@ export const useUserById = (id: number) => {
     queryKey: ['user', id],
     queryFn: () => getUserById(id),
     enabled: !!id,
+    refetchOnMount: true,
   });
 };
 // Get user by ID
@@ -93,9 +94,18 @@ export const useUpdateUser = () => {
       updateUser(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.refetchQueries({ queryKey: ['users'] });
       toast({
         title: 'User updated successfully.',
         status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+    },
+    onError: () => {
+      toast({
+        title: 'Error updating profile.',
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });

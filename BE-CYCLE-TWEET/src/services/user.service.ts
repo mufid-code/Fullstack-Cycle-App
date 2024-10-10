@@ -65,7 +65,6 @@ export default new (class UserService {
       where: { id: userId },
       data: {
         ...data,
-        password: await hashPassword(data.password),
       },
     });
   }

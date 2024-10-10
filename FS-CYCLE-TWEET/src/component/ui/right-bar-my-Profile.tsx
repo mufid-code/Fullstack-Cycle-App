@@ -20,7 +20,7 @@ export function RightBarMyProfile() {
   //   profileData;
   const userId = useAppSelector((state) => state.auth.user.id);
   const { data } = useUserById(userId);
-  const user = useAppSelector((state) => state.auth.user);
+  // const user = useAppSelector((state) => state.auth.user);
 
   const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI's modal hooks
 
@@ -42,7 +42,7 @@ export function RightBarMyProfile() {
         <Stack gap="12px">
           <Image
             src={
-              user.avatarUrl ||
+              data?.avatarUrl ||
               'https://res.cloudinary.com/dje40bx3b/image/upload/v1728323518/circle-image/vdlx9stb6q2vb1syhpb9.png'
             }
             position="relative"
@@ -51,8 +51,8 @@ export function RightBarMyProfile() {
             backgroundSize="cover"
           />
           <Avatar
-            src={user.avatarUrl}
-            name={user.name}
+            src={data?.avatarUrl}
+            name={data?.name}
             position="absolute"
             mt="70px"
             ml="24px"
@@ -85,20 +85,20 @@ export function RightBarMyProfile() {
               as={'span'}
               fontSize="24px"
             >
-              {user.name}
+              {data?.name}
             </Text>
             <Text
               as={'span'}
               fontSize="14px"
               textColor="tweet.gray"
             >
-              @{user.username}
+              @{data?.username}
             </Text>
             <Text
               as={'span'}
               fontSize="16px"
             >
-              {user.bio}
+              {data?.bio}
             </Text>
             <Flex
               gap="4px"

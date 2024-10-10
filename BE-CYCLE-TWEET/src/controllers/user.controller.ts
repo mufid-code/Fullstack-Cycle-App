@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { userSchema } from '../utils/user.schema';
+import { userSchema, userUpdateSchema } from '../utils/user.schema';
 import UserService from '../services/user.service';
 import userService from '../services/user.service';
 import prisma from '../prisma/prisma';
@@ -54,7 +54,7 @@ class UserController {
   async update(req: Request, res: Response) {
     try {
       const userId = Number(req.params.id);
-      const value = await userSchema.validateAsync(req.body);
+      const value = await userUpdateSchema.validateAsync(req.body);
       const user = await userService.updateUser(userId, value);
       res.json(user);
     } catch (error) {

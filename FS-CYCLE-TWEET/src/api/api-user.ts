@@ -1,5 +1,6 @@
 // src/api/userApi.ts
 
+import { UserEntity } from '../app/types/auth-dto';
 import { apiV1 } from './api-config';
 
 export const searchUsers = async (id: string) => {
@@ -52,10 +53,7 @@ export const createUser = async (data: {
 };
 
 // Update User
-export const updateUser = async (
-  id: number,
-  data: { name?: string; email?: string; password?: string }
-) => {
+export const updateUser = async (id: number, data: UserEntity) => {
   const response = await apiV1.put(`/users/${id}`, data, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
