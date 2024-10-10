@@ -21,7 +21,7 @@ export function AppRouter() {
       element: <RegisterRoute />,
     },
     {
-      path: '/reset-password',
+      path: '/reset-password/:token',
       element: <ResetPasswordRoute />,
     },
     {

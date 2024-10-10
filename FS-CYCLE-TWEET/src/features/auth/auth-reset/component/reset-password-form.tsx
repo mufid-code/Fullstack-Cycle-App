@@ -12,6 +12,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { resetPassword } from '../../../../api/api-auth';
+import { useNavigate } from 'react-router-dom';
 
 // Schema untuk validasi
 const resetPasswordSchema = z
@@ -27,6 +28,7 @@ const resetPasswordSchema = z
 type ResetPasswordInputs = z.infer<typeof resetPasswordSchema>;
 
 export function ResetPasswordForm({ token }: { token: string }) {
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
@@ -42,8 +44,11 @@ export function ResetPasswordForm({ token }: { token: string }) {
   // Mutation untuk reset password
   const mutation = useMutation({
     mutationFn: ({ password, token }: { password: string; token: string }) =>
-      resetPassword(password, token),
-    onSuccess: () => alert('Password reset successful'),
+      resetPassword({ password }, token),
+    onSuccess: () => {
+      navigate('/login');
+      alert('Password reset successful');
+    },
 
     onError: (error) => {
       console.error('Error saat reset password:', error);
