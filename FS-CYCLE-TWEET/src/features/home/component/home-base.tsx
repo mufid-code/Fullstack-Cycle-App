@@ -29,10 +29,7 @@ export function HomeBase() {
             key={thread.id}
             username={thread.User.name}
             handle={thread.User.username}
-            avatarUrl={
-              thread.User.avatarUrl ||
-              'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
-            }
+            avatarUrl={thread.User.avatarUrl}
             postTime={new Date(thread.createdAt).toLocaleTimeString()}
             postContent={thread.content}
             postImage={thread.imageUrl}

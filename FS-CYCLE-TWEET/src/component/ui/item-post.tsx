@@ -76,6 +76,7 @@ export default function ItemPost({
         borderRadius="full"
         mt="4"
         src={avatarUrl}
+        name={username}
         boxSize="40px"
         objectFit="cover"
       />
