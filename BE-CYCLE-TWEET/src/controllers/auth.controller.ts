@@ -6,7 +6,7 @@ import {
   registerSchema,
   resetPasswordSchema,
 } from '../utils/auth.schema';
-import { comparePassword } from '../utils/encryption';
+import { comparePassword, hashPassword } from '../utils/encryption';
 import authService from '../services/auth.service';
 import userService from '../services/user.service';
 import prisma from '../prisma/prisma';
@@ -65,43 +65,50 @@ class AuthController {
     const resetToken = await tokenService.createPasswordResetToken(user.id);
     const resetURL = `${req.protocol}://${req.get(
       'host'
-    )}/api/auth/reset-password/${resetToken}`;
+    )}/api/v1/auth/reset-password/${resetToken}`;
 
     await sendEmail({
       to: user.email,
-      subject: 'Your password reset token',
-      text: `You requested a password reset. Please click this link to reset your password: ${resetURL}`,
+      subject: 'Your password reset token (valid for 10 minutes)',
+      text: `You requested a password reset.`,
+      html: `<p>Click the link below to reset your password:</p>
+      <a href="${resetURL}">${resetURL}</a>
+      <p>If you did not request this, please ignore this email.</p>`,
     });
+    console.log('Reset token received:', resetToken); // Debugging log
 
     return res.status(200).json({ message: 'Token sent to email!' });
   }
 
   async resetPassword(req: Request, res: Response) {
-    const { token, password } = req.body;
-    const userId = (req as any).user.id;
-    // Validasi input reset password
-    const { error } = resetPasswordSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+    const { token } = req.params;
+    const { password } = req.body;
+    console.log(req.body);
+    if (!token) {
+      return res.status(400).json({ error: 'Token is required.' });
+    }
+    // Validate input
+    if (!password) {
+      return res.status(400).json({ error: 'Password is required' });
+    }
+    console.log('Reset token received:', token); // Debugging log
+
+    // Verify token
+    const userId = await tokenService.validatePasswordResetToken(token); // Using this context to call the function
+    if (!userId) {
+      return res.status(404).json({ message: 'Invalid or expired token' });
     }
 
-    const passwordResetToken = await tokenService.validatePasswordResetToken(
-      token
-    );
-    // if (!passwordResetToken) {
-    //    res.status(400).json({ message: 'Token is invalid or has expired' });
-    // }
+    // Hash new password
+    const hashedPassword = await hashPassword(password);
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-
+    // Update password in database
     await authService.updateUserPassword(userId, hashedPassword);
 
-    // Hapus token yang telah digunakan
-    await prisma.token.delete({
-      where: { id: userId },
-    });
+    // Delete token after use
+    await tokenService.deletePasswordResetToken(userId); // Assuming deletePasswordResetToken method exists in the service
 
-    return res.status(200).json({ message: 'Password successfully reset' });
+    return res.status(200).json({ message: 'Password reset successfully!' });
   }
   async check(req: Request, res: Response) {
     try {

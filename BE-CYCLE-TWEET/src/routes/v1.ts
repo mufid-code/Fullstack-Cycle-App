@@ -22,6 +22,8 @@ export const routerv1 = express.Router();
 // Mengecek status autentikasi pengguna
 routerv1.get('/auth/check', authentication, authController.check);
 
+routerv1.get('/users/me', authentication, userController.logger);
+
 // AUTH
 
 /**
@@ -62,7 +64,6 @@ routerv1.get('/auth/check', authentication, authController.check);
  *       500:
  *         description: Internal server error
  */
-routerv1.post('/auth/register', authController.register);
 
 /**
  * @swagger
@@ -93,7 +94,66 @@ routerv1.post('/auth/register', authController.register);
  *       500:
  *         description: Internal server error
  */
-routerv1.post('/auth/login', authController.Login);
+
+/**
+ * @swagger
+ * /auth/forget-password:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Request a password reset link
+ *     description: Sends a password reset link to the user's email.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: user@example.com
+ *     responses:
+ *       200:
+ *         description: Email sent successfully
+ *       400:
+ *         description: Invalid email format
+ *       404:
+ *         description: User not found
+ */
+
+/**
+ * @swagger
+ * /auth/reset-password/{token}:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Reset password
+ *     description: Resets the password for the user with the given token.
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         description: The password reset token
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 example: NewPassword123!
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *       400:
+ *         description: Password is required
+ *       404:
+ *         description: Invalid or expired token
+ */
 
 // USER
 /**
@@ -119,8 +179,7 @@ routerv1.post('/auth/login', authController.Login);
  *       404:
  *         description: User not found
  */
-routerv1.get('/users/:id', userController.findById);
-// routerv1.get('/users/search', userController.searchUsers);
+
 /**
  * @swagger
  * /users:
@@ -153,7 +212,7 @@ routerv1.get('/users/:id', userController.findById);
  *       500:
  *         description: Internal server error
  */
-routerv1.post('/users', userController.create);
+
 /**
  * @swagger
  * /users/{id}:
@@ -189,7 +248,7 @@ routerv1.post('/users', userController.create);
  *       500:
  *         description: Internal server error
  */
-routerv1.put('/users/:id', userController.update);
+
 // ADMIN
 
 /**
@@ -207,7 +266,7 @@ routerv1.put('/users/:id', userController.update);
  *       500:
  *         description: Internal server error
  */
-routerv1.get('/users', authentication, userController.findAll);
+
 /**
  * @swagger
  * /users/:id:
@@ -223,12 +282,7 @@ routerv1.get('/users', authentication, userController.findAll);
  *       500:
  *         description: Internal server error
  */
-routerv1.delete(
-  '/users/:id',
-  authentication,
-  authorize(['ADMIN']),
-  userController.delete
-);
+
 /**
  * @swagger
  * /admin/users:
@@ -244,12 +298,6 @@ routerv1.delete(
  *       500:
  *         description: Internal server error
  */
-routerv1.get(
-  '/admin/users',
-  authentication,
-  authorize(['ADMIN']),
-  userController.getUsers
-);
 
 // THREADS
 /**
@@ -268,7 +316,7 @@ routerv1.get(
  *       200:
  *         description: A list of threads
  */
-routerv1.get('/threads', threadController.findAllThreads);
+
 /**
  * @swagger
  * /threads/{id}:
@@ -288,7 +336,6 @@ routerv1.get('/threads', threadController.findAllThreads);
  *       404:
  *         description: Thread not found
  */
-routerv1.get('/threads/:id', threadController.findByIdThread);
 
 /**
  * @swagger
@@ -320,13 +367,7 @@ routerv1.get('/threads/:id', threadController.findByIdThread);
  *       401:
  *         description: Unauthorized
  */
-routerv1.post(
-  '/threads',
-  authentication,
-  upload.single('imageUrl'),
-  // validate(ThreadSchema),
-  threadController.create
-);
+
 /**
  * @swagger
  * '/threads/{id}':
@@ -339,7 +380,7 @@ routerv1.post(
  *             description: 'Internal server error'
  *
  */
-routerv1.put('/threads/:id', authentication, threadController.update);
+
 /**
  * @swagger
  * /threads/{id}:
@@ -359,7 +400,7 @@ routerv1.put('/threads/:id', authentication, threadController.update);
  *       404:
  *         description: Thread not found
  */
-routerv1.delete('/threads/:id', authentication, threadController.delete);
+
 /**
  * @swagger
  * /threads/{id}/replies:
@@ -397,12 +438,7 @@ routerv1.delete('/threads/:id', authentication, threadController.delete);
  *       401:
  *         description: Unauthorized
  */
-routerv1.post(
-  '/threads/:id/replies',
-  authentication,
-  upload.single('imageUrl'),
-  threadController.reply
-);
+
 // Like
 /**
  * @swagger
@@ -438,7 +474,7 @@ routerv1.post(
  *       401:
  *         description: Unauthorized
  */
-routerv1.post('/likes', authentication, likeController.addLike);
+
 /**
  * @swagger
  * /likes/{threadId}:
@@ -460,7 +496,7 @@ routerv1.post('/likes', authentication, likeController.addLike);
  *       404:
  *         description: Like not found
  */
-routerv1.delete('/likes/:threadId', authentication, likeController.removeLike);
+
 /**
  * @swagger
  * /threads/{threadId}/isLiked:
@@ -480,11 +516,7 @@ routerv1.delete('/likes/:threadId', authentication, likeController.removeLike);
  *       200:
  *         description: Like status retrieved
  */
-routerv1.get(
-  '/threads/:threadId/isLiked',
-  authentication,
-  likeController.isThreadLiked
-);
+
 /**
  * @swagger
  * /likes/thread/{threadId}:
@@ -502,7 +534,7 @@ routerv1.get(
  *       200:
  *         description: List of likes for the thread
  */
-routerv1.get('/likes/thread/:threadId', likeController.getLikesByThread);
+
 // Follower
 /**
  * @swagger
@@ -538,7 +570,6 @@ routerv1.get('/likes/thread/:threadId', likeController.getLikesByThread);
  *       401:
  *         description: Unauthorized
  */
-routerv1.post('/followers', authentication, followController.follow);
 
 /**
  * @swagger
@@ -561,11 +592,6 @@ routerv1.post('/followers', authentication, followController.follow);
  *       404:
  *         description: Not following the user
  */
-routerv1.delete(
-  '/followers/:followingId',
-  authentication,
-  followController.unfollow
-);
 
 /**
  * @swagger
@@ -584,7 +610,6 @@ routerv1.delete(
  *       200:
  *         description: List of followers
  */
-routerv1.get('/followers/:userId', followController.getFollowers);
 
 /**
  * @swagger
@@ -603,7 +628,7 @@ routerv1.get('/followers/:userId', followController.getFollowers);
  *       200:
  *         description: List of following users
  */
-routerv1.get('/following/:userId', followController.getFollowing);
+
 /**
  * @swagger
  * /followers/is-following/{followingId}:
@@ -625,67 +650,6 @@ routerv1.get('/following/:userId', followController.getFollowing);
  *       500:
  *         description: Error
  */
-routerv1.get(
-  '/followers/is-following/:followingId',
-  authentication,
-  followController.isFollowing
-);
-
-/**
- * @swagger
- * /auth/forget-password:
- *   post:
- *     summary: Request a password reset
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *     responses:
- *       200:
- *         description: Token sent to email
- *       404:
- *         description: User not found
- */
-routerv1.post(
-  '/auth/forget-password',
-  validate(forgetPasswordSchema),
-  authController.forgetPassword
-);
-
-/**
- * @swagger
- * /auth/reset-password:
- *   post:
- *     summary: Reset password with token
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               token:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: Password successfully reset
- *       400:
- *         description: Token invalid or expired
- */
-routerv1.post(
-  '/auth/reset-password',
-  validate(resetPasswordSchema),
-  authController.resetPassword
-);
 
 /**
  * @swagger
@@ -727,14 +691,6 @@ routerv1.post(
  *       400:
  *         description: Bad request or no file uploaded
  */
-routerv1.post(
-  '/upload/avatar',
-  authentication,
-  upload.single('avatar'),
-  updateUserAvatar
-);
-
-routerv1.get('/users/me', authentication, userController.logger);
 
 /** Search Routes **/
 // Mencari postingan berdasarkan kata kunci
@@ -778,11 +734,6 @@ routerv1.get('/users/me', authentication, userController.logger);
  *       500:
  *         description: Terjadi kesalahan saat mencari pengguna
  */
-routerv1.get(
-  '/search',
-  authentication,
-  searchController.search.bind(searchController)
-);
 
 /**
  * @swagger
@@ -814,7 +765,7 @@ routerv1.get(
  *       500:
  *         description: Internal server error.
  */
-routerv1.get('/images', media);
+
 /**
  * @swagger
  * /threads/{id}/replies:
@@ -856,8 +807,96 @@ routerv1.get('/images', media);
  *       500:
  *         description: Gagal mendapatkan balasan
  */
+
+// #AUTHS
+routerv1.post('/auth/forget-password', authController.forgetPassword);
+routerv1.post('/auth/reset-password/:token', authController.resetPassword);
+routerv1.post('/auth/login', authController.Login);
+routerv1.post('/auth/register', authController.register);
+
+//  #THREADS
+routerv1.put('/threads/:id', authentication, threadController.update);
+routerv1.post(
+  '/threads',
+  authentication,
+  upload.single('imageUrl'),
+  // validate(ThreadSchema),
+  threadController.create
+);
+routerv1.get('/threads/:id', threadController.findByIdThread);
+routerv1.get('/threads', threadController.findAllThreads);
+
+routerv1.post(
+  '/threads/:id/replies',
+  authentication,
+  upload.single('imageUrl'),
+  threadController.reply
+);
+
 routerv1.get(
   '/threads/:id/replies',
   authentication,
   threadController.getReplies
+);
+
+routerv1.delete('/threads/:id', authentication, threadController.delete);
+
+// USERS [admin]
+routerv1.get(
+  '/admin/users',
+  authentication,
+  authorize(['ADMIN']),
+  userController.getUsers
+);
+routerv1.delete(
+  '/users/:id',
+  authentication,
+  authorize(['ADMIN']),
+  userController.delete
+);
+// USERS [user]
+routerv1.get('/users', authentication, userController.findAll);
+routerv1.put('/users/:id', userController.update);
+routerv1.post('/users', userController.create);
+routerv1.get('/users/:id', userController.findById);
+
+routerv1.get(
+  '/search',
+  authentication,
+  searchController.search.bind(searchController)
+);
+
+// FOLLOWERS
+routerv1.get('/followers/:userId', followController.getFollowers);
+routerv1.delete(
+  '/followers/:followingId',
+  authentication,
+  followController.unfollow
+);
+routerv1.post('/followers', authentication, followController.follow);
+
+routerv1.get(
+  '/followers/is-following/:followingId',
+  authentication,
+  followController.isFollowing
+);
+routerv1.get('/following/:userId', followController.getFollowing);
+
+// LIKES
+routerv1.get('/likes/thread/:threadId', likeController.getLikesByThread);
+routerv1.get(
+  '/threads/:threadId/isLiked',
+  authentication,
+  likeController.isThreadLiked
+);
+routerv1.delete('/likes/:threadId', authentication, likeController.removeLike);
+routerv1.post('/likes', authentication, likeController.addLike);
+
+// MEDIA
+routerv1.get('/images', media);
+routerv1.post(
+  '/upload/avatar',
+  authentication,
+  upload.single('avatar'),
+  updateUserAvatar
 );

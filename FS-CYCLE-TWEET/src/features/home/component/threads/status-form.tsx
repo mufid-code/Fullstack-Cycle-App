@@ -110,10 +110,10 @@ export function StatusForm({
           </Button>
         </Flex>
       </FormControl>
-      {watch('imageUrl') && (
+      {watch('imageUrl') && watch('imageUrl').length > 0 && (
         <Image
           mt={4}
-          src={URL.createObjectURL(watch('imageUrl')[0])}
+          src={URL.createObjectURL(watch('imageUrl')[0])} // Menggunakan file pertama
           rounded={'5px'}
           borderBottom={'solid 1px'}
         />
