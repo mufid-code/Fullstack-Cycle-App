@@ -19,12 +19,14 @@ interface ItemPostProps {
   likesCount: number;
   repliesCount: number;
   postId?: Number;
+  authorId?: number;
 }
 export default function ItemPost({
   username,
   handle,
   avatarUrl,
   postId,
+  authorId,
   postTime,
   postContent,
   postImage,
@@ -72,14 +74,17 @@ export default function ItemPost({
       justifyContent="start"
       borderColor="#3F3F3F"
     >
-      <Avatar
-        borderRadius="full"
-        mt="4"
-        src={avatarUrl}
-        name={username}
-        boxSize="40px"
-        objectFit="cover"
-      />
+      <Link to={`/profile/${authorId}`}>
+        <Avatar
+          borderRadius="full"
+          mt="4"
+          src={avatarUrl}
+          name={username}
+          boxSize="40px"
+          objectFit="cover"
+        />
+      </Link>
+
       <Stack gap="8px">
         <Flex
           gap="4px"
@@ -117,11 +122,14 @@ export default function ItemPost({
         >
           {postContent}
         </Text>
-        <Image
-          src={postImage}
-          width={'400px'}
-          rounded={8}
-        />
+        <Link to={`/detail-image/${postId}`}>
+          <Image
+            src={postImage}
+            width={'400px'}
+            rounded={8}
+          />
+        </Link>
+
         <HStack gap="8px">
           <Flex
             fontSize="14px"

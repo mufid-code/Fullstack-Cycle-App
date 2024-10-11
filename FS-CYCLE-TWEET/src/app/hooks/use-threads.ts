@@ -5,8 +5,10 @@ import {
   createThread,
   deleteThread,
   fetchReplies,
+  fetchThreadsByUserId,
   getAllThreads,
   getThreadById,
+  mediaById,
   updateThread,
 } from '../../api/api-thread';
 import {
@@ -110,5 +112,23 @@ export const useDeleteThread = () => {
       queryClient.invalidateQueries({ queryKey: ['threads'] });
       showToast(toast, 'Thread deleted successfully', 'success');
     },
+  });
+};
+
+// useMediaById hook to fetch media data by userId
+export const useMediaById = (userId: number) => {
+  return useQuery({
+    queryKey: ['media', userId],
+    queryFn: () => mediaById(userId),
+    enabled: !!userId, // Only run query if userId is not null or undefined
+  });
+};
+
+// Custom hook to use threads by user ID
+export const useThreadsByUserId = (userId: number) => {
+  return useQuery({
+    queryKey: ['threads', userId],
+    queryFn: () => fetchThreadsByUserId(userId),
+    enabled: !!userId, // Ensure userId is truthy before fetching
   });
 };

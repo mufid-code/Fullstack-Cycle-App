@@ -131,6 +131,28 @@ class ThreadService {
       },
     });
   }
+
+  // Method to get all threads by a specific userId
+  async getAllThreadsByUserId(userId: number): Promise<Thread[]> {
+    return await prisma.thread.findMany({
+      where: {
+        userId, // Filter threads by the user's ID
+      },
+      include: {
+        User: {
+          select: {
+            name: true,
+            avatarUrl: true,
+          },
+        },
+        likes: true, // Include likes information
+        replies: true, // Include replies if there are any
+      },
+      orderBy: {
+        createdAt: 'desc', // Order by most recent threads
+      },
+    });
+  }
 }
 
 export default new ThreadService();

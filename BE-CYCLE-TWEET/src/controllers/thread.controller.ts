@@ -115,6 +115,28 @@ class ThreadController {
       res.status(500).json({ message: 'Failed to get replies', error });
     }
   }
+  // Controller method to fetch threads by userId
+  async getThreadsByUserId(req: Request, res: Response) {
+    try {
+      const userId = Number(req.params.userId); // Get userId from the URL params
+
+      if (isNaN(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+      }
+
+      const threads = await ThreadService.getAllThreadsByUserId(userId);
+
+      if (!threads.length) {
+        return res
+          .status(404)
+          .json({ message: 'No threads found for this user' });
+      }
+
+      res.status(200).json(threads);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch threads' });
+    }
+  }
 }
 
 export default new ThreadController();

@@ -11,7 +11,11 @@ import {
   forgetPasswordSchema,
   resetPasswordSchema,
 } from '../utils/auth.schema';
-import { media, updateUserAvatar } from '../controllers/upload.controller';
+import {
+  allMediaById,
+  media,
+  updateUserAvatar,
+} from '../controllers/upload.controller';
 
 import { ThreadSchema } from '../utils/thread.schema';
 import { upload } from '../middlewares/upload-file';
@@ -438,7 +442,73 @@ routerv1.get('/users/me', authentication, userController.logger);
  *       401:
  *         description: Unauthorized
  */
-
+/**
+ * @swagger
+ * /threads/user/{userId}:
+ *   get:
+ *     summary: Get all threads by a user
+ *     tags:
+ *        [Thread]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the user
+ *     responses:
+ *       200:
+ *         description: A list of threads by the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   content:
+ *                     type: string
+ *                     example: "This is a thread"
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                     example: "2023-10-01T10:15:30Z"
+ *                   imageUrl:
+ *                     type: string
+ *                     nullable: true
+ *                     example: "https://example.com/image.png"
+ *                   User:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         example: "John Doe"
+ *                       avatarUrl:
+ *                         type: string
+ *                         example: "https://example.com/avatar.png"
+ *                   replies:
+ *                     type: array
+ *                     items:
+ *                       $ref: '#/components/schemas/Thread'
+ *                   likes:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         userId:
+ *                           type: integer
+ *                           example: 1
+ *                         threadId:
+ *                           type: integer
+ *                           example: 1
+ *       404:
+ *         description: No threads found for this user
+ *       500:
+ *         description: Internal server error
+ */
 // Like
 /**
  * @swagger
@@ -900,3 +970,58 @@ routerv1.post(
   upload.single('avatar'),
   updateUserAvatar
 );
+
+/**
+ * @swagger
+ * /media/user/{userId}:
+ *   get:
+ *     summary: Get all media by a user
+ *     tags:
+ *       - Media
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the user
+ *     responses:
+ *       200:
+ *         description: A list of media by the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   content:
+ *                     type: string
+ *                     example: "This is a thread with media"
+ *                   imageUrl:
+ *                     type: string
+ *                     example: "https://example.com/image.png"
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                     example: "2023-10-01T10:15:30Z"
+ *                   User:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         example: "John Doe"
+ *                       avatarUrl:
+ *                         type: string
+ *                         example: "https://example.com/avatar.png"
+ *       404:
+ *         description: No media found for this user
+ *       500:
+ *         description: Internal server error
+ */
+routerv1.get('/media/user/:userId', allMediaById);
+
+routerv1.get('/threads/user/:userId', threadController.getThreadsByUserId);

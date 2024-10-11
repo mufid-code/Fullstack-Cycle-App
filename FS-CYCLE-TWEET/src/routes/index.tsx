@@ -9,6 +9,8 @@ import SearchPageRoute from './app/search';
 import FollowRoute from './app/follows';
 import ProtectedRoute from './_protected-route';
 import HomeRoute from './app/home';
+import DetailImageRoute from './app/detail-images';
+import ProfileOtherRoute from './app/profile-page-other-account';
 
 export function AppRouter() {
   const router = createBrowserRouter([
@@ -41,6 +43,10 @@ export function AppRouter() {
           element: <DetailPageRoute />,
         },
         {
+          path: '/detail-image/:id',
+          element: <DetailImageRoute />,
+        },
+        {
           path: '/search',
           element: <SearchPageRoute />,
         },
@@ -52,6 +58,10 @@ export function AppRouter() {
         {
           path: '/profile',
           element: <ProfilePageRoute />,
+        },
+        {
+          path: '/profile/:id',
+          element: <ProfileOtherRoute />,
         },
       ],
     },

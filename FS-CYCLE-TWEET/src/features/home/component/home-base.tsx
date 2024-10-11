@@ -36,6 +36,7 @@ export function HomeBase() {
             likesCount={thread.likes.length}
             repliesCount={thread.replies.length}
             postId={thread.id}
+            authorId={thread.userId}
           />
         );
       })}

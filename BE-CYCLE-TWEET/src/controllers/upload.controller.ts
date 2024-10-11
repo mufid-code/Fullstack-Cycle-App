@@ -49,3 +49,42 @@ export const media = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error searching media', error });
   }
 };
+// Fetch all media (threads with media) by userId
+export const allMediaById = async (req: Request, res: Response) => {
+  const userId = Number(req.params.userId);
+  if (isNaN(userId)) {
+    return res.status(400).json({ message: 'Invalid user ID' });
+  }
+
+  try {
+    const images = await prisma.thread.findMany({
+      where: {
+        userId: userId,
+        imageUrl: { not: null }, // Fetch only threads where imageUrl is not null
+      },
+      select: {
+        id: true,
+        content: true,
+        imageUrl: true,
+        createdAt: true,
+        User: {
+          select: {
+            name: true,
+            avatarUrl: true,
+            id: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    // Jika tidak ada gambar, kirimkan pesan informasi
+    // if (images.length === 0) {
+    //   return res.status(404).json({ message: 'No images found' });
+    // }
+    res.status(201).json(images);
+  } catch (error) {
+    res.status(500).json({ message: 'Error searching media', error });
+  }
+};

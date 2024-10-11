@@ -38,7 +38,17 @@ export const getAllThreads = async (): Promise<ThreadEntity[]> => {
 export const deleteThread = async (id: number): Promise<void> => {
   await apiV1.delete(`/threads/${id}`);
 };
+// Fetch threads by user ID
+export const fetchThreadsByUserId = async (userId: number) => {
+  const response = await apiV1.get(`/threads/user/${userId}`);
+  return response.data;
+};
 
+// Define the API call to fetch media by userId
+export const mediaById = async (userId: number): Promise<any> => {
+  const response = await apiV1.get(`/media/user/${userId}`);
+  return response.data; // Return the data from the API
+};
 // Update a thread by ID
 export const updateThread = async (
   id: number,
