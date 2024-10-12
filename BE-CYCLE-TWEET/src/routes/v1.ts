@@ -221,36 +221,67 @@ routerv1.get('/users/me', authentication, userController.logger);
  * @swagger
  * /users/{id}:
  *   put:
- *     summary: Update user details
- *     description: Update user information by ID
- *     tags: [Users]
+ *     summary: Update a user's information and optionally upload an avatar.
+ *     tags:
+ *       - Users
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
+ *         description: ID of the user to update.
  *         schema:
  *           type: integer
- *         required: true
- *         description: The user ID
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               name:
  *                 type: string
- *               email:
+ *                 description: The user's name.
+ *               username:
  *                 type: string
- *               password:
+ *                 description: The user's username.
+ *               bio:
  *                 type: string
+ *                 description: The user's bio.
+ *               avatarUrl:
+ *                 type: string
+ *                 format: binary
+ *                 description: The user's avatar image file.
  *     responses:
  *       200:
- *         description: User updated
+ *         description: The user was updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 bio:
+ *                   type: string
+ *                 avatarUrl:
+ *                   type: string
+ *                   description: URL of the user's updated avataravatarUrl.
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       400:
+ *         description: Invalid input or validation error.
  *       404:
- *         description: User not found
+ *         description: User not found.
  *       500:
- *         description: Internal server error
+ *         description: Internal server error.
  */
 
 // ADMIN
@@ -926,7 +957,8 @@ routerv1.delete(
 );
 // USERS [user]
 routerv1.get('/users', authentication, userController.findAll);
-routerv1.put('/users/:id', userController.update);
+
+routerv1.put('/users/:id', upload.single('avatarUrl'), userController.update);
 routerv1.post('/users', userController.create);
 routerv1.get('/users/:id', userController.findById);
 
@@ -967,7 +999,7 @@ routerv1.get('/images', media);
 routerv1.post(
   '/upload/avatar',
   authentication,
-  upload.single('avatar'),
+  upload.single('avatarUrl'),
   updateUserAvatar
 );
 

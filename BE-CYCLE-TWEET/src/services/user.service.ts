@@ -65,6 +65,8 @@ export default new (class UserService {
       where: { id: userId },
       data: {
         ...data,
+        // Only update avatarUrl if provided
+        avatarUrl: data.avatarUrl ? data.avatarUrl : undefined,
       },
     });
   }

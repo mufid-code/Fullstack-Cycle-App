@@ -84,13 +84,13 @@ export const useCreateUser = () => {
   });
 };
 
-// Update user
+// Update user hook
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
   const toast = useToast();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UserEntity }) =>
+    mutationFn: ({ id, data }: { id: number; data: FormData }) =>
       updateUser(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
@@ -112,7 +112,6 @@ export const useUpdateUser = () => {
     },
   });
 };
-
 // Delete user (Admin only)
 export const useDeleteUser = () => {
   const queryClient = useQueryClient();

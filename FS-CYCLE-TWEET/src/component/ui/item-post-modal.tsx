@@ -19,7 +19,6 @@ import {
 import { useAppSelector } from '../../app/hooks/use-store';
 import { usePostThread } from '../../app/hooks/use-post-thread';
 import { LuImagePlus } from 'react-icons/lu';
-import { useState } from 'react';
 
 interface CreatePostModalProps {
   isOpen: boolean;

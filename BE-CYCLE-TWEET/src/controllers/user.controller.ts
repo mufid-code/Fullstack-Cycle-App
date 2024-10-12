@@ -4,6 +4,7 @@ import { userSchema, userUpdateSchema } from '../utils/user.schema';
 import UserService from '../services/user.service';
 import userService from '../services/user.service';
 import prisma from '../prisma/prisma';
+import cloudinaryService from '../services/cloudinary.service';
 
 class UserController {
   async create(req: Request, res: Response) {
@@ -55,10 +56,23 @@ class UserController {
     try {
       const userId = Number(req.params.id);
       const value = await userUpdateSchema.validateAsync(req.body);
-      const user = await userService.updateUser(userId, value);
-      res.json(user);
+
+      // Check if a file (avatar) is provided
+      let avatarUrl: string | undefined;
+      if (req.file) {
+        // Assuming you're using multer to handle file uploads
+        const uploadResult = await cloudinaryService.uploadSingle(req.file);
+        avatarUrl = uploadResult.secure_url; // Cloudinary returns the URL in secure_url
+      }
+
+      const updatedUser = await userService.updateUser(userId, {
+        ...value,
+        avatarUrl, // Add avatarUrl to the update data if available
+      });
+
+      res.json(updatedUser);
     } catch (error) {
-      res.json(error);
+      res.status(500).json(error);
     }
   }
   async delete(req: Request, res: Response) {

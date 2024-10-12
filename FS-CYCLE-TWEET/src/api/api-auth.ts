@@ -23,16 +23,14 @@ export const registerData = (
     data,
   });
 };
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const sendPasswordResetEmail = async (email: string) => {
-  const response = await fetch(
-    'http://localhost:8000/api/v1/auth/forget-password',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    }
-  );
+  const response = await fetch(`${API_URL}/api/v1/auth/forget-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
 
   if (!response.ok) {
     throw new Error('Failed to send email.');
@@ -46,7 +44,7 @@ export const resetPassword = async (
   token: string
 ) => {
   const response = await fetch(
-    `http://localhost:8000/api/v1/auth/reset-password/${token}`,
+    `${API_URL}/api/v1/auth/reset-password/${token}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -34,7 +35,7 @@ export default function EditProfileModal({
   isOpen,
   onClose,
 }: EditProfileModalProps) {
-  const queryClient = useQueryClient(); // Hook untuk query client TanStack Query
+  const queryClient = useQueryClient(); // TanStack Query client
   const user = useAppSelector((state) => state.auth.user);
   const {
     register,
@@ -48,16 +49,31 @@ export default function EditProfileModal({
       avatarUrl: user.avatarUrl,
     },
   });
-  const updateUserMutation = useUpdateUser(); // Using custom hook to update the user
+  const updateUserMutation = useUpdateUser();
   const toast = useToast();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  // Handle file selection
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    setSelectedFile(file);
+  };
 
   const onSubmit = (data: any) => {
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('username', data.username);
+    formData.append('bio', data.bio);
+
+    if (selectedFile) {
+      formData.append('avatarUrl', selectedFile); // Append avatar to FormData if a file is selected
+    }
+
     updateUserMutation.mutate(
-      { id: user.id, data },
+      { id: user.id, data: formData },
       {
         onSuccess: () => {
-          // Invalidate user query to refetch updated user data
-          queryClient.invalidateQueries({ queryKey: ['user', user.id] }); // Ini memicu refetch untuk data user
+          queryClient.invalidateQueries({ queryKey: ['user', user.id] });
 
           toast({
             title: 'Profile updated.',
@@ -124,15 +140,19 @@ export default function EditProfileModal({
               >
                 <Box position={'relative'}>
                   <Input
-                    {...register('avatarUrl')}
                     id="avatarUrl"
                     type="file"
                     variant={'unstyled'}
                     border={'none'}
                     hidden
+                    onChange={handleFileChange} // Handle file input
                   />
                   <Avatar
-                    src={user.avatarUrl}
+                    src={
+                      selectedFile
+                        ? URL.createObjectURL(selectedFile)
+                        : user.avatarUrl
+                    }
                     name={user.name}
                     border={'solid 4px'}
                     height={'80px'}
@@ -165,7 +185,7 @@ export default function EditProfileModal({
             </FormControl>
 
             <FormControl mt={4}>
-              <FormLabel>username</FormLabel>
+              <FormLabel>Username</FormLabel>
               <Input
                 type="text"
                 {...register('username')}

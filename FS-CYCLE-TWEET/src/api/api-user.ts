@@ -1,6 +1,5 @@
 // src/api/userApi.ts
 
-import { UserEntity } from '../app/types/auth-dto';
 import { apiV1 } from './api-config';
 
 export const searchUsers = async (id: string) => {
@@ -51,17 +50,20 @@ export const createUser = async (data: {
   });
   return response.data;
 };
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
-// Update User
-export const updateUser = async (id: number, data: UserEntity) => {
-  const response = await apiV1.put(`/users/${id}`, data, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
+export const updateUser = async (id: number, data: FormData) => {
+  const response = await fetch(`${API_URL}/api/v1/users/${id}`, {
+    method: 'PUT',
+    body: data, // send FormData which includes avatar and other user info
   });
-  return response.data;
-};
 
+  if (!response.ok) {
+    throw new Error('Failed to update user');
+  }
+
+  return response.json();
+};
 // Delete User
 export const deleteUser = async (id: number) => {
   const response = await apiV1.delete(`/users/${id}`, {
