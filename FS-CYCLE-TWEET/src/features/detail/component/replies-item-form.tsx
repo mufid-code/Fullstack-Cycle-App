@@ -12,6 +12,7 @@ import {
 import { useAppSelector } from '../../../app/hooks/use-store';
 import { usePostReply } from '../hooks/use-post-replies';
 import { useParams } from 'react-router-dom';
+import { LuImagePlus } from 'react-icons/lu';
 
 interface RepliesItemFormProps {
   placeholder: string;
@@ -72,12 +73,7 @@ export default function RepliesItemForm({
             id="image-upload"
           />
           <label htmlFor="image-upload">
-            <Image
-              src="/src/assets/icons/gallery-add-logo.png"
-              alt="gallery"
-              height="24px"
-              cursor="pointer"
-            />
+            <LuImagePlus />
           </label>
           <Button
             type="submit"

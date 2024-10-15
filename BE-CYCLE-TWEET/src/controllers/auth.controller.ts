@@ -63,9 +63,7 @@ class AuthController {
     }
 
     const resetToken = await tokenService.createPasswordResetToken(user.id);
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/auth/reset-password/${resetToken}`;
+    const resetURL = `${process.env.BASEURL}/reset-password/${resetToken}`;
 
     await sendEmail({
       to: user.email,
