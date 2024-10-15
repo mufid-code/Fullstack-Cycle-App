@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Flex,
-  Image,
   Input,
   FormControl,
   FormErrorMessage,
