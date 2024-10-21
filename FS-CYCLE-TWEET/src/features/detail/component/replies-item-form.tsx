@@ -7,11 +7,13 @@ import {
   FormErrorMessage,
   Avatar,
   Spinner,
+  Image,
 } from '@chakra-ui/react';
 import { useAppSelector } from '../../../app/hooks/use-store';
 import { usePostReply } from '../hooks/use-post-replies';
 import { useParams } from 'react-router-dom';
 import { LuImagePlus } from 'react-icons/lu';
+import { useState } from 'react';
 
 interface RepliesItemFormProps {
   placeholder: string;
@@ -27,6 +29,15 @@ export default function RepliesItemForm({
   const { register, handleSubmit, errors, isSubmitting, onSubmit } =
     usePostReply(id);
 
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    console.log(file);
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
@@ -34,7 +45,6 @@ export default function RepliesItemForm({
         alignItems="center"
         gap={4}
         borderBottom="1px solid"
-        borderColor="brand.borderAbu"
         p={4}
         isInvalid={!!errors.content}
       >
@@ -67,9 +77,10 @@ export default function RepliesItemForm({
           <Input
             type="file"
             accept="image/*"
-            {...register('imageUrl')}
             display="none"
             id="image-upload"
+            {...register('imageUrl')}
+            onChange={handleImageChange}
           />
           <label htmlFor="image-upload">
             <LuImagePlus />
@@ -86,6 +97,15 @@ export default function RepliesItemForm({
           </Button>
         </Flex>
       </FormControl>
+      {imagePreview && (
+        <Image
+          mt={4}
+          src={imagePreview}
+          alt="Image Preview"
+          rounded={'5px'}
+          borderBottom={'solid 1px'}
+        />
+      )}
     </form>
   );
 }

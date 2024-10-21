@@ -18,7 +18,7 @@ export default function ProtectedRoute() {
           <Image
             mb={4}
             h={50}
-            src="/src/assets/logo.png"
+            src="https://res.cloudinary.com/dje40bx3b/image/upload/v1728317302/circle-image/pc6finzpiepopaudfwtf.png"
             alt="circle logo"
           />
           <Spinner

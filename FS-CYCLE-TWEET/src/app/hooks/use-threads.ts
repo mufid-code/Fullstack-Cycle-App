@@ -38,55 +38,6 @@ export const useThreads = () => {
     queryFn: getAllThreads,
   });
 };
-// Fetch all replies
-export const useRepliesById = (id: number) => {
-  return useQuery<ThreadEntity[]>({
-    queryKey: ['replies', id],
-    queryFn: () => fetchReplies(id),
-    enabled: !!id,
-  });
-};
-// Fetch thread by ID
-export const useThreadById = (id: number) => {
-  return useQuery<ThreadEntity>({
-    queryKey: ['threads', id],
-    queryFn: () => getThreadById(id),
-    enabled: !!id, // Only fetch if id exists
-  });
-};
-// Fetch all media
-export const useMedia = () => {
-  return useQuery({
-    queryKey: ['media'],
-    queryFn: getAllImage,
-  });
-};
-
-// Create new thread
-export const useCreateThread = () => {
-  const queryClient = useQueryClient();
-  const toast = useToast();
-  return useMutation({
-    mutationFn: (data: CreateThreadDTO) => createThread(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['threads'] }); // Refresh thread list after new thread is created
-      showToast(toast, 'Thread created successfully', 'success');
-    },
-  });
-};
-// Create new thread
-export const useCreateRepliesThread = () => {
-  const queryClient = useQueryClient();
-  const toast = useToast();
-  return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: threadInputs }) =>
-      createRepliesThread(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['replies'] }); // Refresh thread list after new thread is created
-      showToast(toast, 'Thread created successfully', 'success');
-    },
-  });
-};
 
 // Update thread
 export const useUpdateThread = () => {
@@ -114,6 +65,58 @@ export const useDeleteThread = () => {
     },
   });
 };
+// Custom hook to use threads by user ID
+export const useThreadsByUserId = (userId: number) => {
+  return useQuery({
+    queryKey: ['threads', userId],
+    queryFn: () => fetchThreadsByUserId(userId),
+    enabled: !!userId, // Ensure userId is truthy before fetching
+  });
+};
+
+// Fetch thread by ID
+export const useThreadById = (id: number) => {
+  return useQuery<ThreadEntity>({
+    queryKey: ['threads', id],
+    queryFn: () => getThreadById(id),
+    enabled: !!id, // Only fetch if id exists
+  });
+};
+
+// Create new thread
+export const useCreateThread = () => {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  return useMutation({
+    mutationFn: (data: CreateThreadDTO) => createThread(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['threads'] }); // Refresh thread list after new thread is created
+      showToast(toast, 'Thread created successfully', 'success');
+    },
+  });
+};
+
+// Fetch all replies
+export const useRepliesById = (id: number) => {
+  return useQuery<ThreadEntity[]>({
+    queryKey: ['replies', id],
+    queryFn: () => fetchReplies(id),
+    enabled: !!id,
+  });
+};
+// Create new thread
+export const useCreateRepliesThread = () => {
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: threadInputs }) =>
+      createRepliesThread(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['replies'] }); // Refresh thread list after new thread is created
+      showToast(toast, 'Thread created successfully', 'success');
+    },
+  });
+};
 
 // useMediaById hook to fetch media data by userId
 export const useMediaById = (userId: number) => {
@@ -123,12 +126,10 @@ export const useMediaById = (userId: number) => {
     enabled: !!userId, // Only run query if userId is not null or undefined
   });
 };
-
-// Custom hook to use threads by user ID
-export const useThreadsByUserId = (userId: number) => {
+// Fetch all media
+export const useMedia = () => {
   return useQuery({
-    queryKey: ['threads', userId],
-    queryFn: () => fetchThreadsByUserId(userId),
-    enabled: !!userId, // Ensure userId is truthy before fetching
+    queryKey: ['media'],
+    queryFn: getAllImage,
   });
 };

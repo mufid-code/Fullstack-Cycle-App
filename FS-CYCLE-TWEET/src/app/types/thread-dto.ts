@@ -7,6 +7,7 @@ export type ThreadEntity = {
   createdAt: Date;
   User: UserEntity;
   userId: number;
+  repliesById: number;
   replies: ThreadEntity[];
   likes: LikeEntity[];
 };

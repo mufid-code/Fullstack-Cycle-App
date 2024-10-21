@@ -1,7 +1,6 @@
 import { ThreadEntity } from '../app/types/thread-dto';
 import {
   CreateThreadDTO,
-  repliesInputs,
   threadInputs,
 } from '../features/home/schemas/thread-schemas';
 import Cookies from 'js-cookie';
@@ -91,12 +90,14 @@ export const fetchReplies = async (id: number) => {
 // API Call untuk mengirim balasan
 export const createRepliesThread = async (
   threadId: number,
-  data: repliesInputs
+  data: CreateThreadDTO
 ): Promise<ThreadEntity> => {
   const formData = new FormData();
   formData.append('content', data.content);
-  if (data.imageUrl instanceof File) {
-    formData.append('imageUrl', data.imageUrl);
+  console.log(data.imageUrl instanceof File, data.imageUrl);
+
+  if (data.imageUrl instanceof FileList) {
+    formData.append('imageUrl', data.imageUrl[0]);
   }
 
   const response = await apiV1.post(`/threads/${threadId}/replies`, formData, {

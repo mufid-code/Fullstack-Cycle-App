@@ -106,8 +106,11 @@ export function ResetPasswordForm({ token }: { token: string }) {
         </Stack>
       </FormControl>
       <Button
-        mt={'15px'}
         w={'full'}
+        mt={4}
+        bgColor={'tweet.green'}
+        textColor={'tweet.putih'}
+        _hover={{ bgColor: 'nav.hover' }}
         type="submit"
       >
         Create New Password

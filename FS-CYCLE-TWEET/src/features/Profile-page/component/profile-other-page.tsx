@@ -7,6 +7,7 @@ import {
 } from '../../../app/hooks/use-threads'; // Import the new hook
 import { useParams } from 'react-router-dom';
 import { RightBaProfileOther } from '../../../component/ui/right-bar-profile-other';
+import { ThreadEntity } from '../../../app/types/thread-dto';
 
 export default function ProfileOtherPage() {
   const { id } = useParams(); // Get userId from params
@@ -63,7 +64,7 @@ export default function ProfileOtherPage() {
         tabContent1={
           <>
             {/* Render threads */}
-            {threads?.map((thread: any) => (
+            {threads?.map((thread: ThreadEntity) => (
               <ItemPost
                 key={thread.id}
                 username={thread.User?.name || ''}
@@ -80,6 +81,7 @@ export default function ProfileOtherPage() {
                 likesCount={thread?.likes.length || 0}
                 repliesCount={thread?.replies.length || 0}
                 postId={thread?.id}
+                authorId={thread.userId}
               />
             ))}
           </>

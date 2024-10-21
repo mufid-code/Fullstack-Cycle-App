@@ -1,4 +1,4 @@
-import { Button, FormControl, Input, Stack } from '@chakra-ui/react';
+import { Button, FormControl, Input, Stack, Toast } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,8 +22,22 @@ export function ForgotPasswordForm() {
 
   const mutation = useMutation({
     mutationFn: sendPasswordResetEmail,
-    onSuccess: () => alert('Email sent!'),
-    onError: () => alert('Failed to send email.'),
+    onSuccess: () =>
+      Toast({
+        title: 'forget Password.',
+        description: 'Email sent!',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      }),
+    onError: () =>
+      Toast({
+        title: 'forget Password.',
+        description: 'Failed to send email.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      }),
   });
 
   const onSubmit = (data: ForgotPasswordInputs) => {
@@ -47,6 +61,7 @@ export function ForgotPasswordForm() {
         w={'full'}
         bgColor={'tweet.green'}
         textColor={'tweet.putih'}
+        _hover={{ bgColor: 'nav.hover' }}
         type="submit"
         // isLoading={mutation.isPending}
       >

@@ -137,11 +137,19 @@ export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
               </Flex>
               {/* Preview gambar */}
             </FormControl>
-            {watch('imageUrl') && (
+            {/* {watch('imageUrl') && (
               <Image
                 mt={4}
                 src={URL.createObjectURL(watch('imageUrl')[0])}
                 rounded={'5px'}
+              />
+            )} */}
+            {watch('imageUrl') && watch('imageUrl').length > 0 && (
+              <Image
+                mt={4}
+                src={URL.createObjectURL(watch('imageUrl')[0])} // Menggunakan file pertama
+                rounded={'5px'}
+                borderBottom={'solid 1px'}
               />
             )}
           </ModalBody>

@@ -1,9 +1,9 @@
-import { Card, Flex, Text } from "@chakra-ui/react";
+import { Card, Flex, Text } from '@chakra-ui/react';
 
 const creditData = {
-  developerName: "Your Name",
-  companyName: "DumbWays Indonesia",
-  tagline: "#1 Coding Bootcamp",
+  developerName: 'mufid',
+  companyName: 'DumbWays Indonesia',
+  tagline: '#1 Coding Bootcamp',
 };
 // Credit Component
 export function RightCreditItem() {
@@ -23,7 +23,10 @@ export function RightCreditItem() {
         <Text as="span">{developerName}</Text>
         <Text as="span">•</Text>
       </Flex>
-      <Flex gap="4px" textColor="tweet.gray">
+      <Flex
+        gap="4px"
+        textColor="tweet.gray"
+      >
         <Text as="span">Powered by</Text>
         <Text as="span">{companyName}</Text>
         <Text as="span">•</Text>

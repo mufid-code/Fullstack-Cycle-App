@@ -59,6 +59,7 @@ export function LoginForm() {
           type="submit"
           bgColor={'tweet.green'}
           textColor={'tweet.putih'}
+          _hover={{ bgColor: 'nav.hover' }}
         >
           Login
         </Button>

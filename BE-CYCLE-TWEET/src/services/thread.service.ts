@@ -14,6 +14,10 @@ class ThreadService {
   // Mengambil semua thread
   async getAllThreads(): Promise<Thread[]> {
     return await prisma.thread.findMany({
+      where: {
+        repliesById: null,
+      },
+
       include: {
         replies: true,
         likes: true,

@@ -4,11 +4,10 @@ import ItemPost from '../../../component/ui/item-post';
 import RepliesItemForm from './replies-item-form';
 import { useThreadById, useRepliesById } from '../../../app/hooks/use-threads';
 import { Link, useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../app/hooks/use-store';
 
 export default function PostPage() {
   const { id } = useParams();
-  const user = useAppSelector((state) => state.auth.user);
+  // const user = useAppSelector((state) => state.auth.user);
   const {
     data: threadbyid,
     isLoading: loadingById,
@@ -57,9 +56,10 @@ export default function PostPage() {
       </Flex>
 
       <ItemPost
+        authorId={threadbyid.userId}
         key={threadbyid.id}
-        username={user.name}
-        handle={user.username}
+        username={threadbyid.User.name}
+        handle={threadbyid.User.username}
         postTime={new Date(threadbyid.createdAt).toLocaleTimeString()}
         postContent={threadbyid.content}
         postImage={threadbyid.imageUrl}
@@ -85,9 +85,11 @@ export default function PostPage() {
           }
           postTime={new Date(reply.createdAt).toLocaleTimeString()}
           postContent={reply.content}
+          postImage={reply.imageUrl}
           likesCount={reply.likes.length}
           repliesCount={reply.replies.length}
           postId={reply.id}
+          authorId={reply.userId}
         />
       ))}
     </Box>

@@ -76,7 +76,6 @@ export function RightBaProfileOther({
         <Stack gap="12px">
           <Image
             src={
-              data?.avatarUrl ||
               'https://res.cloudinary.com/dje40bx3b/image/upload/v1728323518/circle-image/vdlx9stb6q2vb1syhpb9.png'
             }
             position="relative"
@@ -149,7 +148,7 @@ export function RightBaProfileOther({
               gap="4px"
               fontSize="16px"
             >
-              <Text as={'span'}>{0}</Text>
+              <Text as={'span'}>{data?.followers.length}</Text>
               <Text
                 as={'span'}
                 textColor="tweet.gray"
@@ -160,7 +159,7 @@ export function RightBaProfileOther({
                 ml="12px"
                 as={'span'}
               >
-                {0}
+                {data?.following.length}
               </Text>
               <Text
                 as={'span'}

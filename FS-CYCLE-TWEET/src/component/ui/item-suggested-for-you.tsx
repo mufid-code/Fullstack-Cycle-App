@@ -24,18 +24,21 @@ export function ItemSuggestedForYou() {
       >
         Suggested for you
       </Heading>
-      {users.slice(0, 5).map((user: UserEntity) => (
-        <ItemFollowing
-          key={user.id}
-          userId={user.id} // Kirimkan userId sebagai props
-          name={user.name}
-          handle={user.bio}
-          avatar={
-            user.avatarUrl ||
-            'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
-          }
-        /> // Kirim data user sebagai props
-      ))}
+      {users
+        .sort(() => Math.random() - 0.5) // Mengacak urutan array users
+        .slice(0, 5) // Mengambil 5 user secara acak
+        .map((user: UserEntity) => (
+          <ItemFollowing
+            key={user.id}
+            userId={user.id} // Kirimkan userId sebagai props
+            name={user.name}
+            handle={user.bio}
+            avatar={
+              user.avatarUrl ||
+              'https://static.vecteezy.com/system/resources/previews/043/117/262/non_2x/man-silhouette-profile-picture-anime-style-free-vector.jpg'
+            }
+          /> // Kirim data user sebagai props
+        ))}
     </Card>
   );
 }

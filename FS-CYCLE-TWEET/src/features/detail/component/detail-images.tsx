@@ -96,7 +96,6 @@ export default function DetailImagePage() {
           width={'30%'}
           id="imageCard"
           borderLeft={'solid 1px'}
-          borderColor={'brand.borderAbu'}
         >
           <ItemPost
             key={threadbyid.id}
@@ -108,6 +107,7 @@ export default function DetailImagePage() {
             likesCount={threadbyid.likes.length}
             repliesCount={threadbyid.replies.length}
             postId={threadbyid.id}
+            authorId={threadbyid.userId}
           />
 
           <RepliesItemForm
@@ -130,6 +130,7 @@ export default function DetailImagePage() {
               likesCount={reply.likes.length}
               repliesCount={reply.replies.length}
               postId={reply.id}
+              authorId={reply.userId}
             />
           ))}
         </Box>

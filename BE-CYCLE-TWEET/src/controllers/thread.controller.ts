@@ -82,14 +82,16 @@ class ThreadController {
 
       // Jika ada file yang di-upload, upload ke Cloudinary
       if (fileUpload) {
-        const image = await cloudinaryService.uploadSingle(fileUpload);
+        const image = await cloudinaryService.uploadSingle(
+          req.file as Express.Multer.File
+        );
         imageUrl = image.secure_url; // Mendapatkan URL dari gambar yang di-upload
       }
 
       // Membuat objek data yang akan divalidasi dan disimpan
       const value = {
         content,
-        imageUrl,
+        imageUrl: imageUrl,
         userId,
       };
 

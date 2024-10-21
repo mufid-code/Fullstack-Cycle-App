@@ -34,8 +34,8 @@ export function StatusForm({
         gap={4}
         justifyContent={'space-between'}
         borderBottom={'solid 1px'}
-        borderColor={'brand.borderAbu'}
         p={4}
+        isInvalid={!!errors.content}
       >
         <Avatar
           src={user.avatarUrl}
@@ -69,7 +69,6 @@ export function StatusForm({
             <FormLabel
               cursor={'pointer'}
               display={'flex'}
-              color={'home.button.hoverText'}
               fontSize={'25px'}
             >
               <LuImagePlus />

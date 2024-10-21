@@ -17,6 +17,7 @@ export function usePostReply(threadId: string | undefined) {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    watch,
   } = useForm<repliesInputs>({
     resolver: zodResolver(repliesSchema),
   });
@@ -55,5 +56,6 @@ export function usePostReply(threadId: string | undefined) {
     errors,
     isSubmitting,
     onSubmit,
+    watch,
   };
 }

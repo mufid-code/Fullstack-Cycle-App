@@ -1,5 +1,5 @@
 // src/components/PageSearch.tsx
-import { Box, Spinner, Text } from '@chakra-ui/react';
+import { Box, Spinner, Text, VStack } from '@chakra-ui/react';
 
 import { useState } from 'react';
 import SearchBar from './search-bar';
@@ -31,23 +31,25 @@ export default function PageSearch() {
           w={'348px'}
           padding={4}
         >
-          <Text
-            textColor={'tweet.putih'}
-            fontSize={'20px'}
-            fontWeight={700}
-            lineHeight={'28px'}
-          >
-            Write and search something
-          </Text>
-          <Text
-            fontSize={'14px'}
-            fontWeight={400}
-            lineHeight={'20px'}
-            color={'tweet.gray'}
-          >
-            Try searching for something else or check the spelling of what you
-            typed.
-          </Text>
+          <VStack mt={'200px'}>
+            <Text
+              textColor={'tweet.putih'}
+              fontSize={'20px'}
+              fontWeight={700}
+              lineHeight={'28px'}
+            >
+              Write and search something
+            </Text>
+            <Text
+              fontSize={'14px'}
+              fontWeight={400}
+              lineHeight={'20px'}
+              color={'tweet.gray'}
+            >
+              Try searching for something else or check the spelling of what you
+              typed.
+            </Text>
+          </VStack>
         </Box>
       )}
 

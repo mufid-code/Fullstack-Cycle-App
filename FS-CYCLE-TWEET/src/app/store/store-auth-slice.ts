@@ -1,11 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { UserStoreDTO } from '../../features/auth/types/dto';
-import { apiV1 } from '../../api/api-config';
 import Cookies from 'js-cookie';
-export const getUserLogged = createAsyncThunk('users/authLogged', async () => {
-  const response = await apiV1.get<null, { data: UserStoreDTO }>('/auth/check');
-  return response.data;
-});
+import { useAuthCheck } from '../thunks/use-Tauth';
 
 // const initialState: UserStoreDTO = {} as UserStoreDTO;
 interface AuthState {
@@ -67,14 +63,14 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getUserLogged.fulfilled, (state, action) => {
+    builder.addCase(useAuthCheck.fulfilled, (state, action) => {
       state.user = action.payload;
       state.loading = 'succeeded';
     });
-    builder.addCase(getUserLogged.pending, (state) => {
+    builder.addCase(useAuthCheck.pending, (state) => {
       state.loading = 'pending';
     });
-    builder.addCase(getUserLogged.rejected, (state) => {
+    builder.addCase(useAuthCheck.rejected, (state) => {
       state.loading = 'failed';
     });
   },

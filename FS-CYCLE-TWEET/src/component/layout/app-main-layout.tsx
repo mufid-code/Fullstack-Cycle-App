@@ -18,15 +18,17 @@ export const MainLayout = ({ mainContent, rightContent }: LayoutProps) => (
   >
     <GridItem
       colSpan={{ base: 0, md: 1 }}
+      maxWidth={'300px'}
       rowSpan={2}
       area="sidebar-left"
     >
       <SidebarLeft />
     </GridItem>
     <GridItem
-      colSpan={3}
+      colSpan={{ base: 2, md: 3 }}
       rowSpan={2}
       area="main"
+      minWidth={'360px'}
     >
       <Flex
         h="full"

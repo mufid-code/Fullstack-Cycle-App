@@ -73,6 +73,7 @@ export default function ItemPost({
       borderBottom="1px"
       justifyContent="start"
       borderColor="#3F3F3F"
+      textColor={'white'}
     >
       <Link to={`/profile/${authorId}`}>
         <Avatar
@@ -125,7 +126,9 @@ export default function ItemPost({
         <Link to={`/detail-image/${postId}`}>
           <Image
             src={postImage}
-            width={'400px'}
+            // width={'300px'}
+            maxHeight={'200px'}
+            objectFit={'contain'}
             rounded={8}
           />
         </Link>

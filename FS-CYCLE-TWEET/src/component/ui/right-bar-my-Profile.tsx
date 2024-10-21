@@ -42,7 +42,6 @@ export function RightBarMyProfile() {
         <Stack gap="12px">
           <Image
             src={
-              data?.avatarUrl ||
               'https://res.cloudinary.com/dje40bx3b/image/upload/v1728323518/circle-image/vdlx9stb6q2vb1syhpb9.png'
             }
             position="relative"
